@@ -1,50 +1,65 @@
 import PetEntity from "../../entities/PetEntity";
+import EnumPetSex from "../../enum/EnumPetSex";
 import EnumSpecies from "../../enum/EnumSpecies";
 import { Expose } from "class-transformer";
 
 export default class Pet {
-   @Expose({ name: "id" })
-   private _id: string;
+  @Expose({ name: "id" })
+  private _id: string;
 
-   @Expose({ name: "name" })
-   private _name: string;
+  @Expose({ name: "name" })
+  private _name: string;
 
-   @Expose({ name: "species" })
-   private _species: EnumSpecies;
+  @Expose({ name: "species" })
+  private _species: EnumSpecies;
 
-   @Expose({ name: "birthDate" })
-   private _birthDate: Date;
+  @Expose({ name: "birthDate" })
+  private _birthDate: Date;
 
-   @Expose({ name: "adopted" })
-   private _adopted: boolean;
+  @Expose({ name: "sex" })
+  private _sex: EnumPetSex;
 
-   constructor(id: string, name: string, species: EnumSpecies, birthDate: Date, adopted?: boolean) {
-      this._id = id;
-      this._name = name;
-      this._species = species;
-      this._birthDate = birthDate;
-      this._adopted = adopted || false;
-   }
+  @Expose({ name: "adopted" })
+  private _adopted: boolean;
 
-   toEntity(): PetEntity {
-      const entity = new PetEntity();
-      entity.id = this._id;
-      entity.name = this._name;
-      entity.species = this._species;
-      entity.birthDate = this._birthDate;
-      entity.adopted = this._adopted;
-      return entity;
-   }
+  constructor(
+    id: string,
+    name: string,
+    species: EnumSpecies,
+    birthDate: Date,
+    sex: EnumPetSex,
+    adopted?: boolean
+  ) {
+    this._id = id;
+    this._name = name;
+    this._species = species;
+    this._birthDate = birthDate;
+    this._sex = sex;
+    this._adopted = adopted || false;
+  }
 
-   get id(): string { return this._id; }
-   get name(): string { return this._name; }
-   get species(): EnumSpecies { return this._species; }
-   get birthDate(): Date { return this._birthDate; }
-   get adopted(): boolean { return this._adopted; }
+  toEntity(): PetEntity {
+    const entity = new PetEntity();
+    entity.id = this._id;
+    entity.name = this._name;
+    entity.species = this._species;
+    entity.birthDate = this._birthDate;
+    entity.sex = this._sex;
+    entity.adopted = this._adopted;
+    return entity;
+  }
 
-   setId(id: string) { this._id = id; }
-   setName(name: string) { this._name = name; }
-   setSpecies(species: EnumSpecies) { this._species = species; }
-   setBirthDate(birthDate: Date) { this._birthDate = birthDate; }
-   setAdopted(adopted: boolean) { this._adopted = adopted; }
+  get id(): string { return this._id; }
+  get name(): string { return this._name; }
+  get species(): EnumSpecies { return this._species; }
+  get birthDate(): Date { return this._birthDate; }
+  get sex(): EnumPetSex { return this._sex; }
+  get adopted(): boolean { return this._adopted; }
+
+  setId(id: string) { this._id = id; }
+  setName(name: string) { this._name = name; }
+  setSpecies(species: EnumSpecies) { this._species = species; }
+  setBirthDate(birthDate: Date) { this._birthDate = birthDate; }
+  setSex(sex: EnumPetSex) { this._sex = sex; }
+  setAdopted(adopted: boolean) { this._adopted = adopted; }
 }

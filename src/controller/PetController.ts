@@ -6,15 +6,17 @@ import Pet from "../domain/Pet/Pet";
 import PetRepostiory from "../repository/Pet/PetRepository";
 import PetEntity from "../entities/PetEntity";
 import { instanceToPlain } from "class-transformer";
+import EnumPetSex from "../enum/EnumPetSex";
+import isValidEnumValue from "../utils/isValidEnumValue";
 
 export default class PetController {
   constructor(private repository: PetRepostiory) {}
 
   async createPet(req: Request, res: Response): Promise<void> {
-    const { name, species, birthDate } = req.body as CreatePetDTO; //ou <CreatePetDTO>req.body
+    const { name, species, birthDate, sex } = req.body as CreatePetDTO; //ou <CreatePetDTO>req.body
     
-    if(!Object.values(EnumSpecies).includes(species)) { 
-      res.status(400).json({ message: "Invalid species" }); 
+    if (!isValidEnumValue(EnumSpecies, species) && !isValidEnumValue(EnumPetSex, sex)) {
+      res.status(400).json({ message: "Invalid species or sex" });
       return;
     }
 
@@ -22,7 +24,8 @@ export default class PetController {
       uuid(),
       name,
       species,
-      birthDate
+      birthDate,
+      sex
     );
 
     const petCreated = await this.repository.createPet(pet.toEntity());
@@ -32,37 +35,39 @@ export default class PetController {
   }
 
   async createPetsBatch(req: Request, res: Response): Promise<void> {
-    const invalidPets: Array<Pet> = [];
+    const invalidPets: Array<CreatePetDTO> = [];
     const petsToCreate = req.body as Array<CreatePetDTO>;
-    const pets = petsToCreate.map(pet => new Pet(
-      uuid(),
-      pet.name,
-      pet.species,
-      pet.birthDate
-    ));
 
-    const validPets = pets.filter(pet => {
-      const isValid = Object.values(EnumSpecies).includes(pet.species);
+    const validPets = petsToCreate.filter(pet => {
+      const isValid = !isValidEnumValue(EnumSpecies, pet.species) && !isValidEnumValue(EnumPetSex, pet.sex);
       if (!isValid) {
         invalidPets.push(pet);
       }
       return isValid;
     });
 
-    if(validPets.length == 0) {
-      res.status(400).json({ message: "Invalid species" });
+    const pets = validPets.map(pet => new Pet(
+      uuid(),
+      pet.name,
+      pet.species,
+      pet.birthDate, 
+      pet.sex
+    ));
+
+    if(pets.length == 0) {
+      res.status(400).json({ message: "Invalid species or sex" });
       return;
     }
 
-    const petsCreated = await this.repository.createPet(validPets as Array<PetEntity>);
+    const petsCreated = await this.repository.createPet(pets as Array<PetEntity>);
 
     if(petsCreated) {      
       if(invalidPets.length > 0) {
         res.status(207).json({ 
-          message: "Some pets were not created due to invalid species.", 
+          message: "Some pets were not created due to invalid attributes.", 
           createdCount: Array.isArray(petsCreated) ? petsCreated.length : 1,
           invalidCount: invalidPets.length,
-          created: petsCreated,
+          created: instanceToPlain(petsCreated),
           invalid: invalidPets 
         });
       } else {
@@ -81,14 +86,14 @@ export default class PetController {
   }
 
   async updatePet(req: Request, res: Response): Promise<void> {
-    const { id, name, species, birthDate, adopted } = req.body as Pet;
+    const { id, name, species, birthDate, adopted, sex } = req.body as Pet;
 
-    if(!Object.values(EnumSpecies).includes(species)) { 
-      res.status(400).json({ message: "Invalid species" }); 
+    if (!isValidEnumValue(EnumSpecies, species) && !isValidEnumValue(EnumPetSex, sex)) {
+      res.status(400).json({ message: "Invalid species or sex" });
       return;
     }
 
-    const pet = new Pet(id, name, species, birthDate, adopted);
+    const pet = new Pet(id, name, species, birthDate, sex, adopted);
     pet.setAdopted(adopted);
     
     const petUpdated = await this.repository.updatePet(id, pet.toEntity());

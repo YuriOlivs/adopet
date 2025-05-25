@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import EnumSpecies from "../enum/EnumSpecies";
+import EnumPetSex from "../enum/EnumPetSex";
 
 @Entity()
 export default class PetEntity {
@@ -14,6 +15,9 @@ export default class PetEntity {
 
    @Column()
    birthDate?: Date;
+
+   @Column()
+   sex?: EnumPetSex;
 
    @Column()
    adopted?: boolean;
