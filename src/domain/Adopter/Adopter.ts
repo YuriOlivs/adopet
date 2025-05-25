@@ -25,8 +25,8 @@ export default class Adopter {
       name: string, 
       password: string, 
       email: string, 
-      photo?: string, 
-      address?: string
+      photo?: string | null, 
+      address?: string | null
    ) {
       this._id = id;
       this._name = name;
