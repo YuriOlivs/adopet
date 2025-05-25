@@ -15,6 +15,7 @@ export default class PetController {
     
     if(!Object.values(EnumSpecies).includes(species)) { 
       res.status(400).json({ message: "Invalid species" }); 
+      return;
     }
 
     const pet = new Pet(
@@ -31,6 +32,7 @@ export default class PetController {
   }
 
   async createPetsBatch(req: Request, res: Response): Promise<void> {
+    const invalidPets: Array<Pet> = [];
     const petsToCreate = req.body as Array<CreatePetDTO>;
     const pets = petsToCreate.map(pet => new Pet(
       uuid(),
@@ -39,22 +41,41 @@ export default class PetController {
       pet.birthDate
     ));
 
-    pets.forEach(pet => {
-      if(!Object.values(EnumSpecies).includes(pet.species)) { 
-        res.status(400).json({ message: "Invalid species" }); 
+    const validPets = pets.filter(pet => {
+      const isValid = Object.values(EnumSpecies).includes(pet.species);
+      if (!isValid) {
+        invalidPets.push(pet);
       }
+      return isValid;
     });
 
-    const petsCreated = await this.repository.createPet(pets as Array<PetEntity>);
-    if(petsCreated) {
+    if(validPets.length == 0) {
+      res.status(400).json({ message: "Invalid species" });
+      return;
+    }
+
+    const petsCreated = await this.repository.createPet(validPets as Array<PetEntity>);
+
+    if(petsCreated) {      
+      if(invalidPets.length > 0) {
+        res.status(207).json({ 
+          message: "Some pets were not created due to invalid species.", 
+          createdCount: Array.isArray(petsCreated) ? petsCreated.length : 1,
+          invalidCount: invalidPets.length,
+          created: petsCreated,
+          invalid: invalidPets 
+        });
+      } else {
         res.status(201).json(instanceToPlain(petsCreated)); 
+      }
     }
   }
 
   async getAllPets(req: Request, res: Response): Promise<void> {
     const pets = await this.repository.getAllPets();
-    if (pets.length === 0) {
-      res.status(204);
+    if (pets.length == 0) {
+      res.status(204).json();
+      return;
     }
     res.status(200).json(pets.map(pet => instanceToPlain(pet)));
   }
@@ -64,6 +85,7 @@ export default class PetController {
 
     if(!Object.values(EnumSpecies).includes(species)) { 
       res.status(400).json({ message: "Invalid species" }); 
+      return;
     }
 
     const pet = new Pet(id, name, species, birthDate, adopted);
