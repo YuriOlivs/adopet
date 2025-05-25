@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export default class Adopter {
+export default class AdopterEntity {
    @PrimaryGeneratedColumn("uuid")
    id!: string;
 
@@ -14,10 +14,10 @@ export default class Adopter {
    @Column()
    address: string;
 
-   @Column()
+   @Column({ nullable: true })
    photo: string;
 
-   @Column()
+   @Column({ nullable: true })
    password: string;
 
    constructor(
