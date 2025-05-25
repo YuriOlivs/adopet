@@ -39,6 +39,12 @@ export default class PetController {
       pet.birthDate
     ));
 
+    pets.forEach(pet => {
+      if(!Object.values(EnumSpecies).includes(pet.species)) { 
+        res.status(400).json({ message: "Invalid species" }); 
+      }
+    });
+
     const petsCreated = await this.repository.createPet(pets as Array<PetEntity>);
     if(petsCreated) {
         res.status(201).json(instanceToPlain(petsCreated)); 
@@ -74,8 +80,8 @@ export default class PetController {
   async deletePet(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     
-    const isPetDeleted = await this.repository.deletePet(id);
-    if(isPetDeleted) {
+    const petDeleted = await this.repository.deletePet(id);
+    if(petDeleted) {
       res.status(200).json({ message: "Pet deleted" });
     } else {
       res.status(404).json({ message: "Pet not found" });
