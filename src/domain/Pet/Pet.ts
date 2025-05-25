@@ -39,13 +39,14 @@ export default class Pet {
   }
 
   toEntity(): PetEntity {
-    const entity = new PetEntity();
-    entity.id = this._id;
-    entity.name = this._name;
-    entity.species = this._species;
-    entity.birthDate = this._birthDate;
-    entity.sex = this._sex;
-    entity.adopted = this._adopted;
+    const entity = new PetEntity(
+      this._id,
+      this._name,
+      this._species,
+      this._birthDate,
+      this._sex,
+      this._adopted
+    );
     return entity;
   }
 

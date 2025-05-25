@@ -5,20 +5,36 @@ import EnumPetSex from "../enum/EnumPetSex";
 @Entity()
 export default class PetEntity {
    @PrimaryGeneratedColumn("uuid")
-   id?: string;
+   id: string;
 
    @Column()
-   name?: string;
+   name: string;
 
    @Column()
-   species?: EnumSpecies;
+   species: EnumSpecies;
 
    @Column()
-   birthDate?: Date;
+   birthDate: Date;
 
    @Column()
-   sex?: EnumPetSex;
+   sex: EnumPetSex;
 
    @Column()
-   adopted?: boolean;
+   adopted: boolean;
+
+   constructor(
+      id: string,
+      name: string,
+      species: EnumSpecies,
+      birthDate: Date,
+      sex: EnumPetSex,
+      adopted: boolean
+   ) {
+      this.id = id;
+      this.name = name;
+      this.species = species;
+      this.birthDate = birthDate;
+      this.sex = sex;
+      this.adopted = adopted;
+   }
 }
