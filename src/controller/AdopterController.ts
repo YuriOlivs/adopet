@@ -49,7 +49,8 @@ export default class AdopterController {
 
    async updateAdopter(req: Request, res: Response) {
       try {
-         const { id, name, email, password, address, photo } = req.body as Adopter;
+         const { name, email, password, address, photo } = req.body as Adopter;
+         const { id } = req.params;	
          
          const adopter = new Adopter(
             id,

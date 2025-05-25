@@ -26,7 +26,7 @@ export default class PetRepostiory implements IPetRepository {
    }
 
    async updatePet(id: string, pet: PetEntity): Promise<PetEntity | null> {   
-      const petFound = await this.repository.findOneBy({  id });
+      const petFound = await this.repository.findOneBy({ id });
       if(!petFound) return null;
 
       Object.assign(petFound, pet);

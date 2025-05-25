@@ -116,14 +116,23 @@ export default class PetController {
 
   async updatePet(req: Request, res: Response): Promise<void> {
     try {
-      const { id, name, species, birthDate, adopted, sex } = req.body as Pet;
+      const { name, species, birthDate, adopted, sex } = req.body as Pet;
+      const { id } = req.params;
 
       if (!isValidEnumValue(EnumSpecies, species) && !isValidEnumValue(EnumPetSex, sex)) {
         res.status(400).json({ message: "Invalid species or sex" });
         return;
       }
 
-      const pet = new Pet(id, name, species, birthDate, sex, adopted);
+      const pet = new Pet(
+        id, 
+        name, 
+        species, 
+        birthDate,
+        sex, 
+        adopted
+      );
+
       pet.setAdopted(adopted);
       
       const petUpdated = await this.repository.updatePet(id, pet.toEntity());
