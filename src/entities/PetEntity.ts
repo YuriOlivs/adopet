@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import EnumSpecies from "../enum/EnumSpecies";
 import EnumPetSex from "../enum/EnumPetSex";
+import Pet from "../domain/Pet/Pet";
 
 @Entity()
 export default class PetEntity {
@@ -36,5 +37,16 @@ export default class PetEntity {
       this.birthDate = birthDate;
       this.sex = sex;
       this.adopted = adopted;
+   }
+
+   toClass(): Pet {
+      return new Pet(
+         this.id,
+         this.name,
+         this.species,
+         this.birthDate,
+         this.sex,
+         this.adopted
+      );
    }
 }

@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import Adopter from "../domain/Adopter/Adopter";
 
 @Entity()
 export default class AdopterEntity {
@@ -34,5 +35,16 @@ export default class AdopterEntity {
       this.address = address;
       this.photo = photo;
       this.password = password;
+   }
+
+   toClass(): Adopter {
+      return new Adopter(
+         this.id,
+         this.name,
+         this.password,
+         this.email,
+         this.photo,
+         this.address
+      );
    }
 }
