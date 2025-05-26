@@ -39,7 +39,7 @@ export default class Pet {
   }
 
   toEntity(): PetEntity {
-    const entity = new PetEntity(
+    return new PetEntity(
       this._id,
       this._name,
       this._species,
@@ -47,7 +47,6 @@ export default class Pet {
       this._sex,
       this._adopted
     );
-    return entity;
   }
 
   get id(): string { return this._id; }

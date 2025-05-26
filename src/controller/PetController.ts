@@ -44,12 +44,17 @@ export default class PetController {
       const petsToCreate = req.body as Array<CreatePetDTO>;
 
       const validPets = petsToCreate.filter(pet => {
-        const isValid = !isValidEnumValue(EnumSpecies, pet.species) && !isValidEnumValue(EnumPetSex, pet.sex);
+        const isValid =
+          isValidEnumValue(EnumSpecies, pet.species) &&
+          isValidEnumValue(EnumPetSex, pet.sex);
+
         if (!isValid) {
           invalidPets.push(pet);
         }
+
         return isValid;
       });
+
 
       const pets = validPets.map(pet => new Pet(
         uuid(),
