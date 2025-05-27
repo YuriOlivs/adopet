@@ -5,13 +5,15 @@ import Adopter from "../domain/models/Adopter/Adopter";
 import { instanceToPlain } from "class-transformer";
 import { CreateAdopterDTO } from "../domain/models/Adopter/CreateAdopterDTO";
 import AdopterMapper from "../domain/mappers/AdopterMapper";
+import Address from "../domain/models/Address/Address";
 
 export default class AdopterController {
    constructor(private repository: AdopterRepository) { }
 
    async createAdopter(req: Request, res: Response) {
       try {
-         const { name, email, password, address, photo } = req.body as CreateAdopterDTO;
+         const { name, email, password, address: addressDTO, photo } = req.body as CreateAdopterDTO;
+         const address = addressDTO ? new Address(uuid(), addressDTO.state, addressDTO.city) : undefined;
 
          const adopter = new Adopter(
             uuid(),
@@ -72,6 +74,15 @@ export default class AdopterController {
       }
       catch (err) {
          res.status(500).json({ message: "Error updating adopter" });
+      }
+   }
+
+   async updateAdopterAddress(req: Request, res: Response) {
+      try {
+         
+      }
+      catch (err) {
+         res.status(500).json({ message: "Error updating adopter address" });
       }
    }
 

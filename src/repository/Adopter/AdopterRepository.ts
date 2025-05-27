@@ -1,6 +1,7 @@
 import IAdopterRepository from "./IAdopterRepository";
 import AdopterEntity from "../../domain/entities/AdopterEntity";
 import { Repository } from "typeorm";
+import AddressEntity from "../../domain/entities/AddressEntity";
 
 export default class AdopterRepository implements IAdopterRepository {
    private repository: Repository<AdopterEntity>;
@@ -22,6 +23,14 @@ export default class AdopterRepository implements IAdopterRepository {
       if (!adopterFound) return null;
 
       Object.assign(adopterFound, adopter);
+      return await this.repository.save(adopterFound);
+   }
+
+   async updateAddress(id: string, address: AddressEntity): Promise<AdopterEntity | null> {
+      const adopterFound = await this.repository.findOneBy({ id });
+      if (!adopterFound) return null;
+
+      adopterFound.address = address;
       return await this.repository.save(adopterFound);
    }
 
