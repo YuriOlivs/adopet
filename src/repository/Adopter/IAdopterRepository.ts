@@ -1,4 +1,4 @@
-import AdopterEntity from "../../domain/entities/Adopter/AdopterEntity";
+import AdopterEntity from "../../domain/entities/AdopterEntity";
 
 export default interface IAdopterRepositor {
    createAdopter(adopter: AdopterEntity): Promise<AdopterEntity>;

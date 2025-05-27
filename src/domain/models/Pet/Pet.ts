@@ -1,4 +1,4 @@
-import PetEntity from "./PetEntity";
+import PetEntity from "../../entities/PetEntity";
 import EnumPetSex from "../../../enum/EnumPetSex";
 import EnumSize from "../../../enum/EnumSize";
 import EnumSpecies from "../../../enum/EnumSpecies";
@@ -42,18 +42,6 @@ export default class Pet {
     this._sex = sex;
     this._size = size;
     this._adopted = adopted || false;
-  }
-
-  toEntity(): PetEntity {
-    return new PetEntity(
-      this._id,
-      this._name,
-      this._species,
-      this._birthDate,
-      this._sex,
-      this._size,
-      this._adopted
-    );
   }
 
   get id(): string { return this._id; }

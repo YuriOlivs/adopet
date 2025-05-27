@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import AdopterRepository from "../repository/Adopter/AdopterRepository";
 import { v4 as uuid } from "uuid";
-import Adopter from "../domain/entities/Adopter/Adopter";
+import Adopter from "../domain/models/Adopter/Adopter";
 import { instanceToPlain } from "class-transformer";
-import { CreateAdopterDTO } from "../domain/entities/Adopter/CreateAdopterDTO";
+import { CreateAdopterDTO } from "../domain/models/Adopter/CreateAdopterDTO";
+import AdopterMapper from "../domain/mappers/AdopterMapper";
 
 export default class AdopterController {
    constructor(private repository: AdopterRepository) { }
@@ -17,11 +18,11 @@ export default class AdopterController {
             name,
             email,
             password,
-            address,
-            photo
+            photo,
+            address
          );
 
-         const adopterCreated = await this.repository.createAdopter(adopter.toEntity());
+         const adopterCreated = await this.repository.createAdopter(AdopterMapper.toEntity(adopter));
          if (adopterCreated) {
             res.status(201).json(instanceToPlain(adopterCreated));
          }
@@ -57,11 +58,11 @@ export default class AdopterController {
             name,
             email,
             password,
-            address,
-            photo
+            photo,
+            address
          );
 
-         const adopterUpdated = await this.repository.updateAdopter(id, adopter.toEntity());
+         const adopterUpdated = await this.repository.updateAdopter(id, AdopterMapper.toEntity(adopter));
          if (adopterUpdated) {
             res.status(200).json(instanceToPlain(adopterUpdated));
          }

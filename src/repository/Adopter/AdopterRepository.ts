@@ -1,5 +1,5 @@
 import IAdopterRepository from "./IAdopterRepository";
-import AdopterEntity from "../../domain/entities/Adopter/AdopterEntity";
+import AdopterEntity from "../../domain/entities/AdopterEntity";
 import { Repository } from "typeorm";
 
 export default class AdopterRepository implements IAdopterRepository {

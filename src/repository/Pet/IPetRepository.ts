@@ -1,4 +1,4 @@
-import PetEntity from "../../domain/entities/Pet/PetEntity";
+import PetEntity from "../../domain/entities/PetEntity";
 
 export default interface IPetRepository {
    createPet(pet: PetEntity): Promise<PetEntity | Array<PetEntity>>;

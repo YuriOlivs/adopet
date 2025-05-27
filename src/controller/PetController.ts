@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import { v4 as uuid } from "uuid";
-import type { CreatePetDTO } from "../domain/entities/Pet/CreatePetDTO";
+import type { CreatePetDTO } from "../domain/models/Pet/CreatePetDTO";
 import EnumSpecies from "../enum/EnumSpecies";
-import Pet from "../domain/entities/Pet/Pet";
+import Pet from "../domain/models/Pet/Pet";
 import PetRepostiory from "../repository/Pet/PetRepository";
-import PetEntity from "../domain/entities/Pet/PetEntity";
+import PetEntity from "../domain/entities/PetEntity";
 import { instanceToPlain } from "class-transformer";
 import EnumPetSex from "../enum/EnumPetSex";
 import isValidEnumValue from "../utils/isValidEnumValue";
+import PetMapper from "../domain/mappers/PetMapper";
 
 export default class PetController {
   constructor(private repository: PetRepostiory) { }
@@ -30,7 +31,7 @@ export default class PetController {
         size
       );
 
-      const petCreated = await this.repository.createPet(pet.toEntity());
+      const petCreated = await this.repository.createPet(PetMapper.toEntity(pet));
       if (petCreated) {
         res.status(201).json(instanceToPlain(petCreated));
       }
@@ -143,7 +144,7 @@ export default class PetController {
 
       pet.setAdopted(adopted);
 
-      const petUpdated = await this.repository.updatePet(id, pet.toEntity());
+      const petUpdated = await this.repository.updatePet(id, PetMapper.toEntity(pet));
       if (petUpdated) {
         res.status(200).json(instanceToPlain(petUpdated));
       } else {

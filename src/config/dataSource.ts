@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
-import PetEntity from "../domain/entities/Pet/PetEntity";
-import AdopterEntity from "../domain/entities/Adopter/AdopterEntity";
+import PetEntity from "../domain/entities/PetEntity";
+import AdopterEntity from "../domain/entities/AdopterEntity";
 
 export const AppDataSource = new DataSource({
    type: "sqlite",

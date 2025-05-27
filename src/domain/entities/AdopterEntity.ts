@@ -1,5 +1,4 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import Adopter from "./Adopter";
 
 @Entity()
 export default class AdopterEntity {
@@ -13,27 +12,27 @@ export default class AdopterEntity {
    email: string;
 
    @Column()
-   address: string;
-
-   @Column({ nullable: true })
-   photo: string;
-
-   @Column({ nullable: true })
    password: string;
+
+   @Column({ nullable: true })
+   photo?: string | null;
+
+   @Column({ nullable: true })
+   address?: string | null;
 
    constructor(
       id: string,
       name: string,
       email: string,
-      address: string,
-      photo: string,
-      password: string
+      password: string,
+      address?: string,
+      photo?: string,
    ) {
       this.id = id;
       this.name = name;
       this.email = email;
-      this.address = address;
-      this.photo = photo;
+      this.address = address || null;
+      this.photo = photo || null;
       this.password = password;
    }
 }
