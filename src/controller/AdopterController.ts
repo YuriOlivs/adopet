@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import AdopterRepository from "../repository/Adopter/AdopterRepository";
 import { v4 as uuid } from "uuid";
-import Adopter from "../domain/Adopter/Adopter";
+import Adopter from "../domain/entities/Adopter/Adopter";
 import { instanceToPlain } from "class-transformer";
-import { CreateAdopterDTO } from "../domain/Adopter/CreateAdopterDTO";
+import { CreateAdopterDTO } from "../domain/entities/Adopter/CreateAdopterDTO";
 
 export default class AdopterController {
-   constructor(private repository: AdopterRepository) {}
+   constructor(private repository: AdopterRepository) { }
 
    async createAdopter(req: Request, res: Response) {
       try {
@@ -14,7 +14,7 @@ export default class AdopterController {
 
          const adopter = new Adopter(
             uuid(),
-            name, 
+            name,
             email,
             password,
             address,
@@ -22,7 +22,7 @@ export default class AdopterController {
          );
 
          const adopterCreated = await this.repository.createAdopter(adopter.toEntity());
-         if(adopterCreated) {
+         if (adopterCreated) {
             res.status(201).json(instanceToPlain(adopterCreated));
          }
       } catch (err) {
@@ -35,14 +35,14 @@ export default class AdopterController {
       try {
          const { id } = req.params;
          const adopter = await this.repository.getAdopter(id);
-         if(adopter) {
+         if (adopter) {
             res.status(200).json(instanceToPlain(adopter));
          }
          else {
             res.status(404).json({ message: "Adopter not found" });
          }
       }
-      catch(err) {
+      catch (err) {
          res.status(500).json({ message: "Error getting adopter" });
       }
    }
@@ -50,8 +50,8 @@ export default class AdopterController {
    async updateAdopter(req: Request, res: Response) {
       try {
          const { name, email, password, address, photo } = req.body as Adopter;
-         const { id } = req.params;	
-         
+         const { id } = req.params;
+
          const adopter = new Adopter(
             id,
             name,
@@ -62,14 +62,14 @@ export default class AdopterController {
          );
 
          const adopterUpdated = await this.repository.updateAdopter(id, adopter.toEntity());
-         if(adopterUpdated) {
+         if (adopterUpdated) {
             res.status(200).json(instanceToPlain(adopterUpdated));
          }
          else {
             res.status(404).json({ message: "Adopter not found" });
          }
       }
-      catch(err) {
+      catch (err) {
          res.status(500).json({ message: "Error updating adopter" });
       }
    }
@@ -79,14 +79,14 @@ export default class AdopterController {
          const { id } = req.params;
 
          const adopterDeleted = await this.repository.deleteAdopter(id);
-         if(adopterDeleted) {
+         if (adopterDeleted) {
             res.status(200).json({ message: "Adopter deleted" });
          }
          else {
             res.status(404).json({ message: "Adopter not found" });
          }
       }
-      catch(err) {
+      catch (err) {
          res.status(500).json({ message: "Error deleting adopter" });
       }
    }

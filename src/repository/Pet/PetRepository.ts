@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import IPetRepository from "./IPetRepository";
-import PetEntity from "../../entities/PetEntity";
+import PetEntity from "../../domain/entities/Pet/PetEntity";
 
 export default class PetRepostiory implements IPetRepository {
    private repository: Repository<PetEntity>;
@@ -10,7 +10,7 @@ export default class PetRepostiory implements IPetRepository {
    }
 
    async createPet(pet: PetEntity | Array<PetEntity>): Promise<PetEntity | Array<PetEntity>> {
-      if(Array.isArray(pet)) {
+      if (Array.isArray(pet)) {
          return await this.repository.save(pet);
       } else {
          return await this.repository.save(pet);
@@ -25,14 +25,14 @@ export default class PetRepostiory implements IPetRepository {
       return await this.repository.findOneBy({ id });
    }
 
-   async updatePet(id: string, pet: PetEntity): Promise<PetEntity | null> {   
+   async updatePet(id: string, pet: PetEntity): Promise<PetEntity | null> {
       const petFound = await this.repository.findOneBy({ id });
-      if(!petFound) return null;
+      if (!petFound) return null;
 
       Object.assign(petFound, pet);
       return await this.repository.save(petFound);
    }
-   
+
    async deletePet(id: string): Promise<boolean> {
       return (await this.repository.delete(id)).affected !== 0;
    }

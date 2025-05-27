@@ -1,7 +1,7 @@
-import PetEntity from "../../entities/PetEntity";
-import EnumPetSex from "../../enum/EnumPetSex";
-import EnumSize from "../../enum/EnumSize";
-import EnumSpecies from "../../enum/EnumSpecies";
+import PetEntity from "./PetEntity";
+import EnumPetSex from "../../../enum/EnumPetSex";
+import EnumSize from "../../../enum/EnumSize";
+import EnumSpecies from "../../../enum/EnumSpecies";
 import { Expose } from "class-transformer";
 
 export default class Pet {

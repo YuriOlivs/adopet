@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import EnumSpecies from "../enum/EnumSpecies";
-import EnumPetSex from "../enum/EnumPetSex";
-import Pet from "../domain/Pet/Pet";
-import EnumSize from "../enum/EnumSize";
+import EnumSpecies from "../../../enum/EnumSpecies";
+import EnumPetSex from "../../../enum/EnumPetSex";
+import Pet from "./Pet";
+import EnumSize from "../../../enum/EnumSize";
 
 @Entity()
 export default class PetEntity {

@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import Adopter from "../domain/Adopter/Adopter";
+import Adopter from "./Adopter";
 
 @Entity()
 export default class AdopterEntity {

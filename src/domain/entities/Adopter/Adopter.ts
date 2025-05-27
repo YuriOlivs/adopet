@@ -1,5 +1,5 @@
 import { Expose } from "class-transformer";
-import AdopterEntity from "../../entities/AdopterEntity";
+import AdopterEntity from "./AdopterEntity";
 
 export default class Adopter {
    @Expose({ name: "id" })
@@ -21,11 +21,11 @@ export default class Adopter {
    private _address?: string | null;
 
    constructor(
-      id: string, 
-      name: string, 
-      password: string, 
-      email: string, 
-      photo?: string | null, 
+      id: string,
+      name: string,
+      password: string,
+      email: string,
+      photo?: string | null,
       address?: string | null
    ) {
       this._id = id;
@@ -53,7 +53,7 @@ export default class Adopter {
    get password(): string { return this._password; }
    get email(): string { return this._email; }
    get photo(): string | null { return this._photo || null; }
-   get address(): string  | null { return this._address || null; }
+   get address(): string | null { return this._address || null; }
 
    setId(id: string) { this._id = id; }
    setName(name: string) { this._name = name; }
