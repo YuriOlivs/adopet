@@ -8,8 +8,8 @@ export default class AdopterMapper {
          adopter.name,
          adopter.email,
          adopter.password,
-         adopter.photo || "",
-         adopter.address || ""
+         adopter.photo,
+         adopter.address
       );
    }
 
@@ -19,8 +19,8 @@ export default class AdopterMapper {
          adopter.name,
          adopter.email,
          adopter.password,
-         adopter.photo || "",
-         adopter.address || ""
+         adopter.photo,
+         adopter.address
       );
    }
 }

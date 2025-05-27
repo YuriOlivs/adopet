@@ -1,6 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
-@Entity()
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import AddressEntity from "./AddressEntity";
+@Entity("adopter")
 export default class AdopterEntity {
    @PrimaryGeneratedColumn("uuid")
    id!: string;
@@ -15,24 +15,29 @@ export default class AdopterEntity {
    password: string;
 
    @Column({ nullable: true })
-   photo?: string | null;
+   photo?: string;
 
-   @Column({ nullable: true })
-   address?: string | null;
+   @OneToOne(() => AddressEntity, { 
+      nullable: true, 
+      cascade: true, 
+      eager: true 
+   })
+   @JoinColumn()
+   address?: AddressEntity;
 
    constructor(
       id: string,
       name: string,
       email: string,
       password: string,
-      address?: string,
+      address?: AddressEntity,
       photo?: string,
    ) {
       this.id = id;
       this.name = name;
       this.email = email;
-      this.address = address || null;
-      this.photo = photo || null;
+      this.address = address;
+      this.photo = photo;
       this.password = password;
    }
 }

@@ -1,10 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import EnumSpecies from "../../enum/EnumSpecies";
-import EnumPetSex from "../../enum/EnumPetSex";
-import Pet from "../models/Pet/Pet";
+import EnumPetSex from "../../enum/EnumPetSex";;
 import EnumSize from "../../enum/EnumSize";
 
-@Entity()
+@Entity("pet")
 export default class PetEntity {
    @PrimaryGeneratedColumn("uuid")
    id: string;
