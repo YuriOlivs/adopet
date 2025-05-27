@@ -36,15 +36,4 @@ export default class AdopterEntity {
       this.photo = photo;
       this.password = password;
    }
-
-   toClass(): Adopter {
-      return new Adopter(
-         this.id,
-         this.name,
-         this.password,
-         this.email,
-         this.photo,
-         this.address
-      );
-   }
 }

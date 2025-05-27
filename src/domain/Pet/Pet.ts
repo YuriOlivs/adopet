@@ -1,5 +1,6 @@
 import PetEntity from "../../entities/PetEntity";
 import EnumPetSex from "../../enum/EnumPetSex";
+import EnumSize from "../../enum/EnumSize";
 import EnumSpecies from "../../enum/EnumSpecies";
 import { Expose } from "class-transformer";
 
@@ -19,6 +20,9 @@ export default class Pet {
   @Expose({ name: "sex" })
   private _sex: EnumPetSex;
 
+  @Expose({ name: "size" })
+  private _size: EnumSize;
+
   @Expose({ name: "adopted" })
   private _adopted: boolean;
 
@@ -28,6 +32,7 @@ export default class Pet {
     species: EnumSpecies,
     birthDate: Date,
     sex: EnumPetSex,
+    size: EnumSize,
     adopted?: boolean
   ) {
     this._id = id;
@@ -35,6 +40,7 @@ export default class Pet {
     this._species = species;
     this._birthDate = birthDate;
     this._sex = sex;
+    this._size = size;
     this._adopted = adopted || false;
   }
 
@@ -45,6 +51,7 @@ export default class Pet {
       this._species,
       this._birthDate,
       this._sex,
+      this._size,
       this._adopted
     );
   }
@@ -54,6 +61,7 @@ export default class Pet {
   get species(): EnumSpecies { return this._species; }
   get birthDate(): Date { return this._birthDate; }
   get sex(): EnumPetSex { return this._sex; }
+  get size(): EnumSize { return this._size; }
   get adopted(): boolean { return this._adopted; }
 
   setId(id: string) { this._id = id; }
@@ -61,5 +69,6 @@ export default class Pet {
   setSpecies(species: EnumSpecies) { this._species = species; }
   setBirthDate(birthDate: Date) { this._birthDate = birthDate; }
   setSex(sex: EnumPetSex) { this._sex = sex; }
+  setSize(size: EnumSize) { this._size = size; }
   setAdopted(adopted: boolean) { this._adopted = adopted; }
 }

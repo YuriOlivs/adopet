@@ -14,7 +14,7 @@ export default class PetController {
 
   async createPet(req: Request, res: Response): Promise<void> {
     try {
-      const { name, species, birthDate, sex } = req.body as CreatePetDTO; //ou <CreatePetDTO>req.body
+      const { name, species, birthDate, sex, size } = req.body as CreatePetDTO; //ou <CreatePetDTO>req.body
       
       if (!isValidEnumValue(EnumSpecies, species) && !isValidEnumValue(EnumPetSex, sex)) {
         res.status(400).json({ message: "Invalid species or sex" });
@@ -26,7 +26,8 @@ export default class PetController {
         name,
         species,
         birthDate,
-        sex
+        sex, 
+        size
       );
 
       const petCreated = await this.repository.createPet(pet.toEntity());
@@ -61,7 +62,8 @@ export default class PetController {
         pet.name,
         pet.species,
         pet.birthDate, 
-        pet.sex
+        pet.sex,
+        pet.size
       ));
 
       if(pets.length == 0) {
@@ -121,7 +123,7 @@ export default class PetController {
 
   async updatePet(req: Request, res: Response): Promise<void> {
     try {
-      const { name, species, birthDate, adopted, sex } = req.body as Pet;
+      const { name, species, birthDate, adopted, sex, size } = req.body as Pet;
       const { id } = req.params;
 
       if (!isValidEnumValue(EnumSpecies, species) && !isValidEnumValue(EnumPetSex, sex)) {
@@ -135,6 +137,7 @@ export default class PetController {
         species, 
         birthDate,
         sex, 
+        size,
         adopted
       );
 

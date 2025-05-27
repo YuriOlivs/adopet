@@ -2,6 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import EnumSpecies from "../enum/EnumSpecies";
 import EnumPetSex from "../enum/EnumPetSex";
 import Pet from "../domain/Pet/Pet";
+import EnumSize from "../enum/EnumSize";
 
 @Entity()
 export default class PetEntity {
@@ -21,6 +22,9 @@ export default class PetEntity {
    sex: EnumPetSex;
 
    @Column()
+   size: EnumSize;
+
+   @Column()
    adopted: boolean;
 
    constructor(
@@ -29,6 +33,7 @@ export default class PetEntity {
       species: EnumSpecies,
       birthDate: Date,
       sex: EnumPetSex,
+      size: EnumSize,
       adopted: boolean
    ) {
       this.id = id;
@@ -36,17 +41,7 @@ export default class PetEntity {
       this.species = species;
       this.birthDate = birthDate;
       this.sex = sex;
+      this.size = size;
       this.adopted = adopted;
-   }
-
-   toClass(): Pet {
-      return new Pet(
-         this.id,
-         this.name,
-         this.species,
-         this.birthDate,
-         this.sex,
-         this.adopted
-      );
    }
 }
