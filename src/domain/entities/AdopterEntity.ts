@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import AddressEntity from "./AddressEntity";
-@Entity("adopter")
+@Entity()
 export default class AdopterEntity {
    @PrimaryGeneratedColumn("uuid")
    id!: string;

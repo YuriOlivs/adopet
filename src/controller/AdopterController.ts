@@ -7,6 +7,8 @@ import CreateAdopterDTO from "../domain/models/Adopter/CreateAdopterDTO";
 import AdopterMapper from "../domain/mappers/AdopterMapper";
 import Address from "../domain/models/Address/Address";
 import AdopterEntity from "../domain/entities/AdopterEntity";
+import { CreateAddressDTO } from "../domain/models/Address/CreateAddressDTO";
+import AddressEntity from "../domain/entities/AddressEntity";
 
 export default class AdopterController {
    constructor(private repository: AdopterRepository) { }
@@ -77,9 +79,20 @@ export default class AdopterController {
       }
    }
 
-   async updateAdopterAddress(req: Request, res: Response) {
+   async updateAddress(req: Request, res: Response) {
       try {
-         
+         const { city, state } = req.body as CreateAddressDTO;
+         const { id } = req.params;
+
+         const address = new AddressEntity(state, city);
+
+         const adopterUpdated = await this.repository.updateAddress(id, address);
+         if (adopterUpdated) {
+            res.status(200).json(instanceToPlain(adopterUpdated));
+         }
+         else {
+            res.status(404).json({ message: "Adopter not found" });
+         }
       }
       catch (err) {
          res.status(500).json({ message: "Error updating adopter address" });

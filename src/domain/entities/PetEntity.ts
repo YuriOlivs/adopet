@@ -3,7 +3,7 @@ import EnumSpecies from "../../enum/EnumSpecies";
 import EnumPetSex from "../../enum/EnumPetSex";;
 import EnumSize from "../../enum/EnumSize";
 
-@Entity("pet")
+@Entity()
 export default class PetEntity {
    @PrimaryGeneratedColumn("uuid")
    id!: string;

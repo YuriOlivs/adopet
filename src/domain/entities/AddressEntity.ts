@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity("address")
+@Entity()
 export default class AddressEntity{
    @PrimaryGeneratedColumn("uuid")
    id!: string
