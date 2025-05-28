@@ -29,9 +29,10 @@ export default class PetController {
         size
       );
 
-      const petCreated = await this.repository.createPet(PetMapper.toEntity(pet));
-      if (petCreated) {
-        res.status(201).json(instanceToPlain(PetMapper.toModel(petCreated)));
+      const entityCreated = await this.repository.createPet(PetMapper.toEntity(pet));
+      if (entityCreated) {
+        const model = PetMapper.toModel(entityCreated);
+        res.status(201).json(instanceToPlain(PetMapper.toResponse(model)));
       }
     } catch (error) {
       res.status(500).json({ message: "Error creating pet" });
@@ -60,19 +61,21 @@ export default class PetController {
         return;
       }
 
-      const petsCreated = await this.repository.createPet(PetMapper.toEntity(validPets));
+      const entitiesCreated = await this.repository.createPet(PetMapper.toEntity(validPets));
 
-      if (petsCreated) {
+      if (entitiesCreated) {
+        const model = PetMapper.toModel(entitiesCreated);
+
         if (invalidPets.length > 0) {
           res.status(207).json({
             message: "Some pets were not created due to invalid attributes.",
-            createdCount: Array.isArray(petsCreated) ? petsCreated.length : 1,
+            createdCount: Array.isArray(entitiesCreated) ? entitiesCreated.length : 1,
             invalidCount: invalidPets.length,
-            created: instanceToPlain(petsCreated),
+            created: instanceToPlain(PetMapper.toResponse(model)),
             invalid: invalidPets
           });
         } else {
-          res.status(201).json(instanceToPlain(petsCreated));
+          res.status(201).json(instanceToPlain(entitiesCreated));
         }
       }
     }
@@ -84,9 +87,10 @@ export default class PetController {
   async getPet(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const pet = await this.repository.getPet(id);
-      if (pet) {
-        res.status(200).json(instanceToPlain(PetMapper.toModel(pet)));
+      const entity = await this.repository.getPet(id);
+      if (entity) {
+        const model = PetMapper.toModel(entity);
+        res.status(200).json(instanceToPlain(PetMapper.toResponse(model)));
       } else {
         res.status(404).json({ message: "Pet not found" });
       }
@@ -103,7 +107,10 @@ export default class PetController {
         res.status(204).json();
         return;
       }
-      res.status(200).json(pets.map(pet => instanceToPlain(PetMapper.toModel(pet))));
+      res.status(200).json(pets.map(pet => {
+        const model = PetMapper.toModel(pet);
+        return instanceToPlain(PetMapper.toResponse(model));
+      }));
     }
     catch (err) {
       res.status(500).json({ message: "Error getting pets" });
@@ -130,9 +137,10 @@ export default class PetController {
         adopter ?? undefined
       );
 
-      const petUpdated = await this.repository.updatePet(id, PetMapper.toEntity(pet) as PetEntity);
-      if (petUpdated) {
-        res.status(200).json(instanceToPlain(petUpdated));
+      const entityUpdated = await this.repository.updatePet(id, PetMapper.toEntity(pet) as PetEntity);
+      if (entityUpdated) {
+        const model = PetMapper.toModel(entityUpdated);
+        res.status(200).json(instanceToPlain(PetMapper.toResponse(model)));
       } else {
         res.status(404).json({ message: "Pet not found" });
       }
@@ -161,10 +169,11 @@ export default class PetController {
   async adoptPet(req: Request, res: Response): Promise<void> {
     try {
       const { petId, adopterId } = req.params;
-      const petAdopted = await this.repository.adoptPet(petId, adopterId);
+      const entity = await this.repository.adoptPet(petId, adopterId);
       
-      if(petAdopted) {
-        res.status(200).json(instanceToPlain(PetMapper.toModel(petAdopted)));
+      if(entity) {
+        const model = PetMapper.toModel(entity);
+        res.status(200).json(instanceToPlain(PetMapper.toResponse(model)));
       }
       else {
         res.status(404).json({ message: "Pet not found" });

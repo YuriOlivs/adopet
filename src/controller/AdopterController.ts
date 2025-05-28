@@ -26,9 +26,10 @@ export default class AdopterController {
             address
          );
 
-         const adopterCreated = await this.repository.createAdopter(AdopterMapper.toEntity(adopter));
-         if (adopterCreated) {
-            res.status(201).json(instanceToPlain(AdopterMapper.toModel(adopterCreated)));
+         const entityCreated = await this.repository.createAdopter(AdopterMapper.toEntity(adopter));
+         if (entityCreated) {
+            const model = AdopterMapper.toModel(entityCreated);
+            res.status(201).json(instanceToPlain(AdopterMapper.toResponse(model)));
          }
       } catch (err) {
          res.status(500).json({ message: "Error creating adopter" });
@@ -39,9 +40,10 @@ export default class AdopterController {
    async getAdopter(req: Request, res: Response) {
       try {
          const { id } = req.params;
-         const adopter = await this.repository.getAdopter(id);
-         if (adopter) {
-            res.status(200).json(instanceToPlain(AdopterMapper.toModel(adopter)));
+         const entity = await this.repository.getAdopter(id);
+         if (entity) {
+            const model = AdopterMapper.toModel(entity);
+            res.status(200).json(instanceToPlain(AdopterMapper.toResponse(model)));
          }
          else {
             res.status(404).json({ message: "Adopter not found" });
@@ -66,9 +68,10 @@ export default class AdopterController {
             address ?? undefined
          );
 
-         const adopterUpdated = await this.repository.updateAdopter(id, AdopterMapper.toEntity(adopter) as AdopterEntity);
-         if (adopterUpdated) {
-            res.status(200).json(instanceToPlain(adopterUpdated));
+         const entityUpdated = await this.repository.updateAdopter(id, AdopterMapper.toEntity(adopter) as AdopterEntity);
+         if (entityUpdated) {
+            const model = AdopterMapper.toModel(entityUpdated);
+            res.status(200).json(instanceToPlain(AdopterMapper.toResponse(model)));
          }
          else {
             res.status(404).json({ message: "Adopter not found" });
@@ -86,9 +89,10 @@ export default class AdopterController {
 
          const address = new AddressEntity(state, city);
 
-         const adopterUpdated = await this.repository.updateAddress(id, address);
-         if (adopterUpdated) {
-            res.status(200).json(instanceToPlain(adopterUpdated));
+         const entityUpdated = await this.repository.updateAddress(id, address);
+         if (entityUpdated) {
+            const model = AdopterMapper.toModel(entityUpdated);
+            res.status(200).json(instanceToPlain(AdopterMapper.toResponse(model)));
          }
          else {
             res.status(404).json({ message: "Adopter not found" });

@@ -2,6 +2,7 @@ import Pet from "../models/Pet/Pet";
 import PetEntity from "../entities/PetEntity";
 import CreatePetDTO from "../models/Pet/CreatePetDTO";
 import AdopterMapper from "./AdopterMapper";
+import ResponsePetDTO from "../models/Pet/ResponsePetDTO";
 
 export default class PetMapper {
   static toEntity(
@@ -62,6 +63,34 @@ export default class PetMapper {
       pet.species,
       pet.birthDate,
       pet.sex,
+      pet.size,
+      adopter
+    );
+  }
+
+  static toResponse(pet: Pet | Array<Pet>): Array<ResponsePetDTO> | ResponsePetDTO {
+    if (Array.isArray(pet)) {
+      return pet.map(pet => {
+        const adopter = pet.adopter ? AdopterMapper.toResponse(pet.adopter) : undefined;
+        return new ResponsePetDTO(
+          pet.id, 
+          pet.name, 
+          pet.species, 
+          pet.birthDate, 
+          pet.sex, 
+          pet.size,
+          adopter
+        );
+      });
+    }
+
+    const adopter = pet.adopter ? AdopterMapper.toResponse(pet.adopter) : undefined;
+    return new ResponsePetDTO(
+      pet.id, 
+      pet.name, 
+      pet.species, 
+      pet.birthDate, 
+      pet.sex, 
       pet.size,
       adopter
     );

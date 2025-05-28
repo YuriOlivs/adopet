@@ -4,6 +4,7 @@ import PetEntity from "../entities/PetEntity";
 import Address from "../models/Address/Address";
 import Adopter from "../models/Adopter/Adopter";
 import CreateAdopterDTO from "../models/Adopter/CreateAdopterDTO";
+import ResponseAdopterDTO from "../models/Adopter/ResponseAdopterDTO";
 import Pet from "../models/Pet/Pet";
 import PetMapper from "./PetMapper";
 
@@ -58,6 +59,15 @@ export default class AdopterMapper {
       adopter.photo,
       address,
       pets
+    );
+  }
+
+  static toResponse(adopter: Adopter): ResponseAdopterDTO {
+    return new ResponseAdopterDTO(
+      adopter.id,
+      adopter.name,
+      adopter.email,
+      adopter.photo ?? undefined
     );
   }
 }
