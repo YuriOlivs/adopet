@@ -6,4 +6,5 @@ export default interface IPetRepository {
    getPet(id: string): Promise<PetEntity | null>;
    updatePet(id: string, pet: PetEntity): Promise<PetEntity | null>;
    deletePet(id: string): Promise<boolean>;
+   adoptPet(petId: string, adopterId: string): Promise<PetEntity | null>;
 }

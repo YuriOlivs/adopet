@@ -112,7 +112,7 @@ export default class PetController {
 
   async updatePet(req: Request, res: Response): Promise<void> {
     try {
-      const { name, species, birthDate, adopted, sex, size } = req.body as Pet;
+      const { name, species, birthDate, adopter, sex, size } = req.body as Pet;
       const { id } = req.params;
 
       if (!isValidEnumValue(EnumSpecies, species) && !isValidEnumValue(EnumPetSex, sex)) {
@@ -127,7 +127,7 @@ export default class PetController {
         birthDate,
         sex,
         size,
-        adopted
+        adopter ?? undefined
       );
 
       const petUpdated = await this.repository.updatePet(id, PetMapper.toEntity(pet) as PetEntity);
@@ -155,6 +155,23 @@ export default class PetController {
     }
     catch (err) {
       res.status(500).json({ message: "Error deleting pet" });
+    }
+  }
+
+  async adoptPet(req: Request, res: Response): Promise<void> {
+    try {
+      const { petId, adopterId } = req.params;
+      const petAdopted = await this.repository.adoptPet(petId, adopterId);
+      
+      if(petAdopted) {
+        res.status(200).json(instanceToPlain(PetMapper.toModel(petAdopted)));
+      }
+      else {
+        res.status(404).json({ message: "Pet not found" });
+      }
+    }
+    catch (err) {
+      res.status(500).json({ message: "Error adopting pet" });
     }
   }
 }

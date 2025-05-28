@@ -41,7 +41,7 @@ export default class AdopterController {
          const { id } = req.params;
          const adopter = await this.repository.getAdopter(id);
          if (adopter) {
-            res.status(200).json(instanceToPlain(adopter));
+            res.status(200).json(instanceToPlain(AdopterMapper.toModel(adopter)));
          }
          else {
             res.status(404).json({ message: "Adopter not found" });
@@ -62,8 +62,8 @@ export default class AdopterController {
             name,
             email,
             password,
-            photo,
-            address
+            photo ?? undefined,
+            address ?? undefined
          );
 
          const adopterUpdated = await this.repository.updateAdopter(id, AdopterMapper.toEntity(adopter) as AdopterEntity);

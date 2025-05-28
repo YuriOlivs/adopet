@@ -2,6 +2,7 @@ import EnumPetSex from "../../../enum/EnumPetSex";
 import EnumSize from "../../../enum/EnumSize";
 import EnumSpecies from "../../../enum/EnumSpecies";
 import { Expose } from "class-transformer";
+import Adopter from "../Adopter/Adopter";
 
 export default class Pet {
   @Expose({ name: "id" })
@@ -22,8 +23,8 @@ export default class Pet {
   @Expose({ name: "size" })
   private _size: EnumSize;
 
-  @Expose({ name: "adopted" })
-  private _adopted: boolean;
+  @Expose({ name: "adopter" })
+  private _adopter?: Adopter | null;
 
   constructor(
     id: string,
@@ -32,7 +33,7 @@ export default class Pet {
     birthDate: Date,
     sex: EnumPetSex,
     size: EnumSize,
-    adopted?: boolean
+    adopter?: Adopter
   ) {
     this._id = id;
     this._name = name;
@@ -40,8 +41,10 @@ export default class Pet {
     this._birthDate = birthDate;
     this._sex = sex;
     this._size = size;
-    this._adopted = adopted || false;
+    this._adopter = adopter ?? null;
   }
+
+  isAdopted(): boolean { return this._adopter ? true : false; }
 
   get id(): string { return this._id; }
   get name(): string { return this._name; }
@@ -49,7 +52,7 @@ export default class Pet {
   get birthDate(): Date { return this._birthDate; }
   get sex(): EnumPetSex { return this._sex; }
   get size(): EnumSize { return this._size; }
-  get adopted(): boolean { return this._adopted; }
+  get adopter(): Adopter | null { return this._adopter || null; }
 
   setId(id: string) { this._id = id; }
   setName(name: string) { this._name = name; }
@@ -57,5 +60,5 @@ export default class Pet {
   setBirthDate(birthDate: Date) { this._birthDate = birthDate; }
   setSex(sex: EnumPetSex) { this._sex = sex; }
   setSize(size: EnumSize) { this._size = size; }
-  setAdopted(adopted: boolean) { this._adopted = adopted; }
+  setAdopted(adopted: Adopter) { this._adopter = adopted; }
 }

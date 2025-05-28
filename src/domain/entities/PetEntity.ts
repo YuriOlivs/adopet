@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import EnumSpecies from "../../enum/EnumSpecies";
 import EnumPetSex from "../../enum/EnumPetSex";;
 import EnumSize from "../../enum/EnumSize";
+import AdopterEntity from "./AdopterEntity";
 
 @Entity()
 export default class PetEntity {
@@ -23,8 +24,8 @@ export default class PetEntity {
    @Column()
    size: EnumSize;
 
-   @Column()
-   adopted: boolean;
+   @ManyToOne(() => AdopterEntity, (adotante) => adotante.pets)
+   adopter!: AdopterEntity
 
    constructor(
       name: string,
@@ -32,15 +33,15 @@ export default class PetEntity {
       birthDate: Date,
       sex: EnumPetSex,
       size: EnumSize,
-      adopted: boolean,
-      id?: string
+      id?: string,
+      adopter?: AdopterEntity,
    ) {
       if (id) this.id = id;
+      if(adopter) this.adopter = adopter;
       this.name = name;
       this.species = species;
       this.birthDate = birthDate;
       this.sex = sex;
       this.size = size;
-      this.adopted = adopted;
    }
 }
