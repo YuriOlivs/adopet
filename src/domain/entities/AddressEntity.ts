@@ -9,8 +9,8 @@ export default class AddressEntity{
    @Column()
    city: string
 
-   constructor(id: string, state: string, city: string) {
-      this.id = id;
+   constructor(state: string, city: string, id?: string) {
+      if(id )this.id = id;
       this.state = state;
       this.city = city;
    }

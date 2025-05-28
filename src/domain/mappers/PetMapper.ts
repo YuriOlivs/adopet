@@ -7,7 +7,7 @@ export default class PetMapper {
     pet: Pet | Array<Pet> | CreatePetDTO | Array<CreatePetDTO>
   ): PetEntity | Array<PetEntity> {
     if (Array.isArray(pet)) {
-      return pet.map((item) => {
+      return pet.map(item => {
         const id = item instanceof Pet ? item.id : undefined;
         return new PetEntity(
           item.name,

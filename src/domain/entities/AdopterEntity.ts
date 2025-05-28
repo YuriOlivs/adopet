@@ -26,14 +26,14 @@ export default class AdopterEntity {
    address?: AddressEntity;
 
    constructor(
-      id: string,
       name: string,
       email: string,
       password: string,
-      address?: AddressEntity,
       photo?: string,
+      address?: AddressEntity,
+      id?: string,
    ) {
-      this.id = id;
+      if(id)this.id = id;
       this.name = name;
       this.email = email;
       this.address = address;

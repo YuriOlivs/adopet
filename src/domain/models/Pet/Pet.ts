@@ -1,4 +1,3 @@
-import PetEntity from "../../entities/PetEntity";
 import EnumPetSex from "../../../enum/EnumPetSex";
 import EnumSize from "../../../enum/EnumSize";
 import EnumSpecies from "../../../enum/EnumSpecies";

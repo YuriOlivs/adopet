@@ -1,9 +1,17 @@
 import { CreateAddressDTO } from "../Address/CreateAddressDTO";
 
-export type CreateAdopterDTO = {
+export default class CreateAdopterDTO {
    name: string;
    email: string;
    password: string;
-   address?: CreateAddressDTO;
    photo?: string;
+   address?: CreateAddressDTO;
+
+   constructor(name: string, email: string, password: string, photo?: string, address?: CreateAddressDTO) {
+      this.name = name;
+      this.email = email;
+      this.password = password;
+      this.photo = photo;
+      this.address = address;
+   }
 }

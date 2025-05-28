@@ -3,9 +3,10 @@ import AdopterRepository from "../repository/Adopter/AdopterRepository";
 import { v4 as uuid } from "uuid";
 import Adopter from "../domain/models/Adopter/Adopter";
 import { instanceToPlain } from "class-transformer";
-import { CreateAdopterDTO } from "../domain/models/Adopter/CreateAdopterDTO";
+import CreateAdopterDTO from "../domain/models/Adopter/CreateAdopterDTO";
 import AdopterMapper from "../domain/mappers/AdopterMapper";
 import Address from "../domain/models/Address/Address";
+import AdopterEntity from "../domain/entities/AdopterEntity";
 
 export default class AdopterController {
    constructor(private repository: AdopterRepository) { }
@@ -15,8 +16,7 @@ export default class AdopterController {
          const { name, email, password, address: addressDTO, photo } = req.body as CreateAdopterDTO;
          const address = addressDTO ? new Address(uuid(), addressDTO.state, addressDTO.city) : undefined;
 
-         const adopter = new Adopter(
-            uuid(),
+         const adopter = new CreateAdopterDTO(
             name,
             email,
             password,
@@ -26,7 +26,7 @@ export default class AdopterController {
 
          const adopterCreated = await this.repository.createAdopter(AdopterMapper.toEntity(adopter));
          if (adopterCreated) {
-            res.status(201).json(instanceToPlain(adopterCreated));
+            res.status(201).json(instanceToPlain(AdopterMapper.toModel(adopterCreated)));
          }
       } catch (err) {
          res.status(500).json({ message: "Error creating adopter" });
@@ -64,7 +64,7 @@ export default class AdopterController {
             address
          );
 
-         const adopterUpdated = await this.repository.updateAdopter(id, AdopterMapper.toEntity(adopter));
+         const adopterUpdated = await this.repository.updateAdopter(id, AdopterMapper.toEntity(adopter) as AdopterEntity);
          if (adopterUpdated) {
             res.status(200).json(instanceToPlain(adopterUpdated));
          }
