@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { v4 as uuid } from "uuid";
-import type { CreatePetDTO } from "../domain/models/Pet/CreatePetDTO";
+import CreatePetDTO from "../domain/models/Pet/CreatePetDTO";
 import EnumSpecies from "../enum/EnumSpecies";
 import Pet from "../domain/models/Pet/Pet";
 import PetRepostiory from "../repository/Pet/PetRepository";
@@ -22,8 +21,7 @@ export default class PetController {
         return;
       }
 
-      const pet = new Pet(
-        uuid(),
+      const pet = new CreatePetDTO(
         name,
         species,
         birthDate,
@@ -33,7 +31,7 @@ export default class PetController {
 
       const petCreated = await this.repository.createPet(PetMapper.toEntity(pet));
       if (petCreated) {
-        res.status(201).json(instanceToPlain(petCreated));
+        res.status(201).json(instanceToPlain(PetMapper.toModel(petCreated)));
       }
     } catch (error) {
       res.status(500).json({ message: "Error creating pet" });
@@ -57,22 +55,12 @@ export default class PetController {
         return isValid;
       });
 
-
-      const pets = validPets.map(pet => new Pet(
-        uuid(),
-        pet.name,
-        pet.species,
-        pet.birthDate,
-        pet.sex,
-        pet.size
-      ));
-
-      if (pets.length == 0) {
+      if (validPets.length == 0) {
         res.status(400).json({ message: "Invalid species or sex" });
         return;
       }
 
-      const petsCreated = await this.repository.createPet(pets as Array<PetEntity>);
+      const petsCreated = await this.repository.createPet(PetMapper.toEntity(validPets));
 
       if (petsCreated) {
         if (invalidPets.length > 0) {
@@ -142,9 +130,7 @@ export default class PetController {
         adopted
       );
 
-      pet.setAdopted(adopted);
-
-      const petUpdated = await this.repository.updatePet(id, PetMapper.toEntity(pet));
+      const petUpdated = await this.repository.updatePet(id, PetMapper.toEntity(pet) as PetEntity);
       if (petUpdated) {
         res.status(200).json(instanceToPlain(petUpdated));
       } else {

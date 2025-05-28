@@ -6,7 +6,7 @@ import EnumSize from "../../enum/EnumSize";
 @Entity("pet")
 export default class PetEntity {
    @PrimaryGeneratedColumn("uuid")
-   id: string;
+   id!: string;
 
    @Column()
    name: string;
@@ -27,15 +27,15 @@ export default class PetEntity {
    adopted: boolean;
 
    constructor(
-      id: string,
       name: string,
       species: EnumSpecies,
       birthDate: Date,
       sex: EnumPetSex,
       size: EnumSize,
-      adopted: boolean
+      adopted: boolean,
+      id?: string
    ) {
-      this.id = id;
+      if (id) this.id = id;
       this.name = name;
       this.species = species;
       this.birthDate = birthDate;
