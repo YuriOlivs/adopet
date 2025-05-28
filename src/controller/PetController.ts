@@ -8,6 +8,7 @@ import { instanceToPlain } from "class-transformer";
 import EnumPetSex from "../enum/EnumPetSex";
 import isValidEnumValue from "../utils/isValidEnumValue";
 import PetMapper from "../domain/mappers/PetMapper";
+import EnumSize from "../enum/EnumSize";
 
 export default class PetController {
   constructor(private repository: PetRepostiory) { }
@@ -16,8 +17,18 @@ export default class PetController {
     try {
       const { name, species, birthDate, sex, size } = req.body as CreatePetDTO; //ou <CreatePetDTO>req.body
 
-      if (!isValidEnumValue(EnumSpecies, species) && !isValidEnumValue(EnumPetSex, sex)) {
-        res.status(400).json({ message: "Invalid species or sex" });
+      if (!isValidEnumValue(EnumSpecies, species)) {
+        res.status(400).json({ message: "Invalid species" });
+        return;
+      }
+
+      if (!isValidEnumValue(EnumPetSex, sex)) {
+        res.status(400).json({ message: "Invalid sex" });
+        return;
+      }
+
+      if (!isValidEnumValue(EnumSize, size)) {
+        res.status(400).json({ message: "Invalid size" });
         return;
       }
 
@@ -57,7 +68,7 @@ export default class PetController {
       });
 
       if (validPets.length == 0) {
-        res.status(400).json({ message: "Invalid species or sex" });
+        res.status(400).json({ message: "Invalid species, sex or size for the given pets" });
         return;
       }
 
