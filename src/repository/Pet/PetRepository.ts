@@ -2,6 +2,7 @@ import { Repository } from "typeorm";
 import IPetRepository from "./IPetRepository";
 import PetEntity from "../../domain/entities/PetEntity";
 import AdopterEntity from "../../domain/entities/AdopterEntity";
+import { PetFilters } from "../../domain/models/PetFilters";
 
 export default class PetRepostiory implements IPetRepository {
    private repository: Repository<PetEntity>;
@@ -20,8 +21,15 @@ export default class PetRepostiory implements IPetRepository {
       }
    }
 
-   async getAllPets(): Promise<Array<PetEntity>> {
-      return await this.repository.find();
+   async getAllPets(filters: PetFilters): Promise<Array<PetEntity>> {
+      const where: any = {};
+
+      if (filters.size) where.size = filters.size;
+      if (filters.species) where.species = filters.species;
+      if (filters.sex) where.sex = filters.sex;
+
+
+      return await this.repository.find({ where, relations: ['adopter'] });
    }
 
    async getPet(id: string): Promise<PetEntity | null> {

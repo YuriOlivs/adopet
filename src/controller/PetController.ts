@@ -9,9 +9,10 @@ import EnumPetSex from "../enum/EnumPetSex";
 import isValidEnumValue from "../utils/isValidEnumValue";
 import PetMapper from "../domain/mappers/PetMapper";
 import EnumSize from "../enum/EnumSize";
+import { PetFilters } from "../domain/models/PetFilters";
 
 export default class PetController {
-  constructor(private repository: PetRepostiory) { }
+  constructor(private repository: PetRepostiory) {}
 
   async createPet(req: Request, res: Response): Promise<void> {
     try {
@@ -32,15 +33,11 @@ export default class PetController {
         return;
       }
 
-      const pet = new CreatePetDTO(
-        name,
-        species,
-        birthDate,
-        sex,
-        size
-      );
+      const pet = new CreatePetDTO(name, species, birthDate, sex, size);
 
-      const entityCreated = await this.repository.createPet(PetMapper.toEntity(pet));
+      const entityCreated = await this.repository.createPet(
+        PetMapper.toEntity(pet)
+      );
       if (entityCreated) {
         const model = PetMapper.toModel(entityCreated);
         res.status(201).json(instanceToPlain(PetMapper.toResponse(model)));
@@ -55,7 +52,7 @@ export default class PetController {
       const invalidPets: Array<CreatePetDTO> = [];
       const petsToCreate = req.body as Array<CreatePetDTO>;
 
-      const validPets = petsToCreate.filter(pet => {
+      const validPets = petsToCreate.filter((pet) => {
         const isValid =
           isValidEnumValue(EnumSpecies, pet.species) &&
           isValidEnumValue(EnumPetSex, pet.sex);
@@ -68,11 +65,15 @@ export default class PetController {
       });
 
       if (validPets.length == 0) {
-        res.status(400).json({ message: "Invalid species, sex or size for the given pets" });
+        res
+          .status(400)
+          .json({ message: "Invalid species, sex or size for the given pets" });
         return;
       }
 
-      const entitiesCreated = await this.repository.createPet(PetMapper.toEntity(validPets));
+      const entitiesCreated = await this.repository.createPet(
+        PetMapper.toEntity(validPets)
+      );
 
       if (entitiesCreated) {
         const model = PetMapper.toModel(entitiesCreated);
@@ -80,17 +81,18 @@ export default class PetController {
         if (invalidPets.length > 0) {
           res.status(207).json({
             message: "Some pets were not created due to invalid attributes.",
-            createdCount: Array.isArray(entitiesCreated) ? entitiesCreated.length : 1,
+            createdCount: Array.isArray(entitiesCreated)
+              ? entitiesCreated.length
+              : 1,
             invalidCount: invalidPets.length,
             created: instanceToPlain(PetMapper.toResponse(model)),
-            invalid: invalidPets
+            invalid: invalidPets,
           });
         } else {
           res.status(201).json(instanceToPlain(entitiesCreated));
         }
       }
-    }
-    catch (err) {
+    } catch (err) {
       res.status(500).json({ message: "Error creating pets" });
     }
   }
@@ -105,25 +107,28 @@ export default class PetController {
       } else {
         res.status(404).json({ message: "Pet not found" });
       }
-    }
-    catch (err) {
+    } catch (err) {
       res.status(500).json({ message: "Error getting pet" });
     }
   }
 
   async getAllPets(req: Request, res: Response): Promise<void> {
     try {
-      const pets = await this.repository.getAllPets();
+      const filters = req.query as PetFilters;
+      const pets = await this.repository.getAllPets(filters);
+
       if (pets.length == 0) {
         res.status(204).json();
         return;
       }
-      res.status(200).json(pets.map(pet => {
-        const model = PetMapper.toModel(pet);
-        return instanceToPlain(PetMapper.toResponse(model));
-      }));
-    }
-    catch (err) {
+
+      res.status(200).json(
+        pets.map((pet) => {
+          const model = PetMapper.toModel(pet);
+          return instanceToPlain(PetMapper.toResponse(model));
+        })
+      );
+    } catch (err) {
       res.status(500).json({ message: "Error getting pets" });
     }
   }
@@ -133,7 +138,10 @@ export default class PetController {
       const { name, species, birthDate, adopter, sex, size } = req.body as Pet;
       const { id } = req.params;
 
-      if (!isValidEnumValue(EnumSpecies, species) && !isValidEnumValue(EnumPetSex, sex)) {
+      if (
+        !isValidEnumValue(EnumSpecies, species) &&
+        !isValidEnumValue(EnumPetSex, sex)
+      ) {
         res.status(400).json({ message: "Invalid species or sex" });
         return;
       }
@@ -148,15 +156,17 @@ export default class PetController {
         adopter ?? undefined
       );
 
-      const entityUpdated = await this.repository.updatePet(id, PetMapper.toEntity(pet) as PetEntity);
+      const entityUpdated = await this.repository.updatePet(
+        id,
+        PetMapper.toEntity(pet) as PetEntity
+      );
       if (entityUpdated) {
         const model = PetMapper.toModel(entityUpdated);
         res.status(200).json(instanceToPlain(PetMapper.toResponse(model)));
       } else {
         res.status(404).json({ message: "Pet not found" });
       }
-    }
-    catch (err) {
+    } catch (err) {
       res.status(500).json({ message: "Error updating pet" });
     }
   }
@@ -171,8 +181,7 @@ export default class PetController {
       } else {
         res.status(404).json({ message: "Pet not found" });
       }
-    }
-    catch (err) {
+    } catch (err) {
       res.status(500).json({ message: "Error deleting pet" });
     }
   }
@@ -181,16 +190,14 @@ export default class PetController {
     try {
       const { petId, adopterId } = req.params;
       const entity = await this.repository.adoptPet(petId, adopterId);
-      
-      if(entity) {
+
+      if (entity) {
         const model = PetMapper.toModel(entity);
         res.status(200).json(instanceToPlain(PetMapper.toResponse(model)));
-      }
-      else {
+      } else {
         res.status(404).json({ message: "Pet not found" });
       }
-    }
-    catch (err) {
+    } catch (err) {
       res.status(500).json({ message: "Error adopting pet" });
     }
   }
