@@ -14,7 +14,10 @@ import ResponseAPI from "../domain/models/ResponseAPI";
 export default class AdopterController {
    constructor(private repository: AdopterRepository) { }
 
-   async createAdopter(req: Request, res: Response) {
+   async createAdopter(
+      req: Request<Record<string, string>, {}, CreateAdopterDTO>, 
+      res: Response<ResponseAPI>
+   ) {
       try {
          const { name, email, password, address: addressDTO, photo } = req.body as CreateAdopterDTO;
          const address = addressDTO ? new Address(uuid(), addressDTO.state, addressDTO.city) : undefined;
@@ -38,7 +41,10 @@ export default class AdopterController {
       }
    }
 
-   async getAdopter(req: Request, res: Response) {
+   async getAdopter(
+      req: Request<Record<string, string>, {}, CreateAdopterDTO>, 
+      res: Response<ResponseAPI>
+   ) {
       try {
          const { id } = req.params;
          const entity = await this.repository.getAdopter(id);
@@ -55,7 +61,10 @@ export default class AdopterController {
       }
    }
 
-   async getAllAdopters(req: Request, res: Response) {
+   async getAllAdopters(
+      req: Request<Record<string, string>, {}, CreateAdopterDTO>, 
+      res: Response<ResponseAPI>
+   ) {
       try {
          const entities = await this.repository.getAllAdopters();
          const models = entities.map((entity) => AdopterMapper.toModel(entity));
@@ -66,7 +75,10 @@ export default class AdopterController {
       }
    }
 
-   async updateAdopter(req: Request, res: Response) {
+   async updateAdopter(
+      req: Request<Record<string, string>, {}, CreateAdopterDTO>, 
+      res: Response<ResponseAPI>
+   ) {
       try {
          const { name, email, password, address, photo } = req.body as Adopter;
          const { id } = req.params;
@@ -94,7 +106,10 @@ export default class AdopterController {
       }
    }
 
-   async updateAddress(req: Request, res: Response) {
+   async updateAddress(
+      req: Request<Record<string, string>, {}, CreateAddressDTO>, 
+      res: Response<ResponseAPI>
+   ) {
       try {
          const { city, state } = req.body as CreateAddressDTO;
          const { id } = req.params;
@@ -115,7 +130,10 @@ export default class AdopterController {
       }
    }
 
-   async deleteAdopter(req: Request, res: Response) {
+   async deleteAdopter(
+      req: Request<Record<string, string>, {}, CreateAdopterDTO>, 
+      res: Response<ResponseAPI>
+   ) {
       try {
          const { id } = req.params;
 
