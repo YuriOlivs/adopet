@@ -7,6 +7,7 @@ export default interface IAdopterRepositor {
    updateAddress(id: string, address: AddressEntity): Promise<AdopterEntity | null>;
    
    getAdopter(id: string): Promise<AdopterEntity | null>;
+   getAllAdopters(): Promise<Array<AdopterEntity>>;
 
    deleteAdopter(id: string): Promise<boolean>;
 }

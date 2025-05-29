@@ -8,6 +8,7 @@ const adopterRepository = new AdopterRepository(AppDataSource.getRepository("Ado
 const adopterController = new AdopterController(adopterRepository);
 
 router.post("/", (req, res) => adopterController.createAdopter(req, res));
+router.get("/", (req, res) => adopterController.getAllAdopters(req, res));
 router.get("/:id", (req, res) => adopterController.getAdopter(req, res));
 router.put("/:id", (req, res) => adopterController.updateAdopter(req, res));
 router.delete("/:id", (req, res) => adopterController.deleteAdopter(req, res));
