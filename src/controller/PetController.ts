@@ -132,7 +132,7 @@ export default class PetController {
         return;
       }
 
-      res.status(200).json(new ResponseAPI("Pets retrieved", pets.map((pet) => {
+      res.status(200).json(new ResponseAPI("Pets found", pets.map((pet) => {
         const model = PetMapper.toModel(pet);
         return instanceToPlain(PetMapper.toResponse(model));
       })));

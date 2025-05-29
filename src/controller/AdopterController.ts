@@ -55,6 +55,17 @@ export default class AdopterController {
       }
    }
 
+   async getAllAdopters(req: Request, res: Response) {
+      try {
+         const entities = await this.repository.getAllAdopters();
+         const models = entities.map((entity) => AdopterMapper.toModel(entity));
+         res.status(200).json(new ResponseAPI("Adopters found", models.map((model) => instanceToPlain(AdopterMapper.toResponse(model)))));
+      }
+      catch (err) {
+         res.status(500).json(new ResponseAPI("Error getting adopters", err));
+      }
+   }
+
    async updateAdopter(req: Request, res: Response) {
       try {
          const { name, email, password, address, photo } = req.body as Adopter;

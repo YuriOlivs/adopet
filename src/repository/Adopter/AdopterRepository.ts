@@ -18,6 +18,10 @@ export default class AdopterRepository implements IAdopterRepository {
       return await this.repository.findOneBy({ id });
    }
 
+   async getAllAdopters(): Promise<Array<AdopterEntity>> {
+      return await this.repository.find();
+   }
+
    async updateAdopter(id: string, adopter: AdopterEntity): Promise<AdopterEntity | null> {
       const adopterFound = await this.repository.findOneBy({ id });
       if (!adopterFound) return null;
