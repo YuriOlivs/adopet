@@ -15,9 +15,12 @@ import ResponseAPI from "../domain/models/ResponseAPI";
 export default class PetController {
   constructor(private repository: PetRepostiory) {}
 
-  async createPet(req: Request, res: Response): Promise<void> {
+  async createPet(
+    req: Request<Record<string, string>, {}, CreatePetDTO>, 
+    res: Response<ResponseAPI>
+  ): Promise<void> {
     try {
-      const { name, species, birthDate, sex, size } = req.body as CreatePetDTO;
+      const { name, species, birthDate, sex, size } = req.body;
 
       if (!isValidEnumValue(EnumSpecies, species)) {
         res.status(400).json(new ResponseAPI("Invalid species"));
@@ -48,10 +51,13 @@ export default class PetController {
     }
   }
 
-  async createPetsBatch(req: Request, res: Response): Promise<void> {
+  async createPetsBatch(
+    req: Request<Record<string, string>, {}, Array<CreatePetDTO>>, 
+    res: Response<ResponseAPI>
+  ): Promise<void> {
     try {
       const invalidPets: Array<CreatePetDTO> = [];
-      const petsToCreate = req.body as Array<CreatePetDTO>;
+      const petsToCreate = req.body;
 
       const validPets = petsToCreate.filter((pet) => {
         const isValid =
@@ -95,7 +101,10 @@ export default class PetController {
     }
   }
 
-  async getPet(req: Request, res: Response): Promise<void> {
+  async getPet(
+    req: Request<Record<string, string>, {}, {}>, 
+    res: Response<ResponseAPI>
+  ): Promise<void> {
     try {
       const { id } = req.params;
       const entity = await this.repository.getPet(id);
@@ -110,9 +119,12 @@ export default class PetController {
     }
   }
 
-  async getAllPets(req: Request, res: Response): Promise<void> {
+  async getAllPets(
+    req: Request<Record<string, string>, {}, {}, PetFilters>, 
+    res: Response<ResponseAPI>
+  ): Promise<void> {
     try {
-      const filters = req.query as PetFilters;
+      const filters = req.query;
       const pets = await this.repository.getAllPets(filters);
 
       if (pets.length == 0) {
@@ -129,9 +141,12 @@ export default class PetController {
     }
   }
 
-  async updatePet(req: Request, res: Response): Promise<void> {
+  async updatePet(
+    req: Request<Record<string, string>, {}, Pet>, 
+    res: Response<ResponseAPI>
+  ): Promise<void> {
     try {
-      const { name, species, birthDate, adopter, sex, size } = req.body as Pet;
+      const { name, species, birthDate, adopter, sex, size } = req.body;
       const { id } = req.params;
 
       if (
@@ -167,7 +182,10 @@ export default class PetController {
     }
   }
 
-  async deletePet(req: Request, res: Response): Promise<void> {
+  async deletePet(
+    req: Request<Record<string, string>, {}, {}>, 
+    res: Response<ResponseAPI>
+  ): Promise<void> {
     try {
       const { id } = req.params;
 
@@ -182,7 +200,10 @@ export default class PetController {
     }
   }
 
-  async adoptPet(req: Request, res: Response): Promise<void> {
+  async adoptPet(
+    req: Request<Record<string, string>, {}, {}>, 
+    res: Response<ResponseAPI>
+  ): Promise<void> {
     try {
       const { petId, adopterId } = req.params;
       const entity = await this.repository.adoptPet(petId, adopterId);
