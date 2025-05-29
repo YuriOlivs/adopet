@@ -10,26 +10,27 @@ import isValidEnumValue from "../utils/isValidEnumValue";
 import PetMapper from "../domain/mappers/PetMapper";
 import EnumSize from "../enum/EnumSize";
 import { PetFilters } from "../domain/models/PetFilters";
+import ResponseAPI from "../domain/models/ResponseAPI";
 
 export default class PetController {
   constructor(private repository: PetRepostiory) {}
 
   async createPet(req: Request, res: Response): Promise<void> {
     try {
-      const { name, species, birthDate, sex, size } = req.body as CreatePetDTO; //ou <CreatePetDTO>req.body
+      const { name, species, birthDate, sex, size } = req.body as CreatePetDTO;
 
       if (!isValidEnumValue(EnumSpecies, species)) {
-        res.status(400).json({ message: "Invalid species" });
+        res.status(400).json(new ResponseAPI("Invalid species"));
         return;
       }
 
       if (!isValidEnumValue(EnumPetSex, sex)) {
-        res.status(400).json({ message: "Invalid sex" });
+        res.status(400).json(new ResponseAPI("Invalid sex"));
         return;
       }
 
       if (!isValidEnumValue(EnumSize, size)) {
-        res.status(400).json({ message: "Invalid size" });
+        res.status(400).json(new ResponseAPI("Invalid size"));
         return;
       }
 
@@ -40,10 +41,10 @@ export default class PetController {
       );
       if (entityCreated) {
         const model = PetMapper.toModel(entityCreated);
-        res.status(201).json(instanceToPlain(PetMapper.toResponse(model)));
+        res.status(201).json(new ResponseAPI("Pet created", instanceToPlain(PetMapper.toResponse(model))));
       }
     } catch (error) {
-      res.status(500).json({ message: "Error creating pet" });
+      res.status(500).json(new ResponseAPI("Error creating pet", error));
     }
   }
 
@@ -65,9 +66,7 @@ export default class PetController {
       });
 
       if (validPets.length == 0) {
-        res
-          .status(400)
-          .json({ message: "Invalid species, sex or size for the given pets" });
+        res.status(400).json(new ResponseAPI("Invalid species, sex or size for the given pets"));
         return;
       }
 
@@ -79,21 +78,20 @@ export default class PetController {
         const model = PetMapper.toModel(entitiesCreated);
 
         if (invalidPets.length > 0) {
-          res.status(207).json({
-            message: "Some pets were not created due to invalid attributes.",
+          res.status(207).json(new ResponseAPI("Some pets were not created due to invalid attributes.", {
             createdCount: Array.isArray(entitiesCreated)
               ? entitiesCreated.length
               : 1,
             invalidCount: invalidPets.length,
             created: instanceToPlain(PetMapper.toResponse(model)),
             invalid: invalidPets,
-          });
+          }));
         } else {
-          res.status(201).json(instanceToPlain(entitiesCreated));
+          res.status(201).json(new ResponseAPI("Pets created", instanceToPlain(PetMapper.toResponse(model))));
         }
       }
     } catch (err) {
-      res.status(500).json({ message: "Error creating pets" });
+      res.status(500).json(new ResponseAPI("Error creating pets", err));
     }
   }
 
@@ -103,12 +101,12 @@ export default class PetController {
       const entity = await this.repository.getPet(id);
       if (entity) {
         const model = PetMapper.toModel(entity);
-        res.status(200).json(instanceToPlain(PetMapper.toResponse(model)));
+        res.status(200).json(new ResponseAPI("Pet found", instanceToPlain(PetMapper.toResponse(model))));
       } else {
-        res.status(404).json({ message: "Pet not found" });
+        res.status(404).json(new ResponseAPI("Pet not found"));
       }
     } catch (err) {
-      res.status(500).json({ message: "Error getting pet" });
+      res.status(500).json(new ResponseAPI("Error getting pet"));
     }
   }
 
@@ -118,18 +116,16 @@ export default class PetController {
       const pets = await this.repository.getAllPets(filters);
 
       if (pets.length == 0) {
-        res.status(204).json();
+        res.status(204).json(new ResponseAPI("No pets found"));
         return;
       }
 
-      res.status(200).json(
-        pets.map((pet) => {
-          const model = PetMapper.toModel(pet);
-          return instanceToPlain(PetMapper.toResponse(model));
-        })
-      );
+      res.status(200).json(new ResponseAPI("Pets retrieved", pets.map((pet) => {
+        const model = PetMapper.toModel(pet);
+        return instanceToPlain(PetMapper.toResponse(model));
+      })));
     } catch (err) {
-      res.status(500).json({ message: "Error getting pets" });
+      res.status(500).json(new ResponseAPI("Error getting pets"));
     }
   }
 
@@ -142,7 +138,7 @@ export default class PetController {
         !isValidEnumValue(EnumSpecies, species) &&
         !isValidEnumValue(EnumPetSex, sex)
       ) {
-        res.status(400).json({ message: "Invalid species or sex" });
+        res.status(400).json(new ResponseAPI("Invalid species or sex"));
         return;
       }
 
@@ -162,12 +158,12 @@ export default class PetController {
       );
       if (entityUpdated) {
         const model = PetMapper.toModel(entityUpdated);
-        res.status(200).json(instanceToPlain(PetMapper.toResponse(model)));
+        res.status(200).json(new ResponseAPI("Pet updated", instanceToPlain(PetMapper.toResponse(model))));
       } else {
-        res.status(404).json({ message: "Pet not found" });
+        res.status(404).json(new ResponseAPI("Pet not found"));
       }
     } catch (err) {
-      res.status(500).json({ message: "Error updating pet" });
+      res.status(500).json(new ResponseAPI("Error updating pet"));
     }
   }
 
@@ -177,12 +173,12 @@ export default class PetController {
 
       const petDeleted = await this.repository.deletePet(id);
       if (petDeleted) {
-        res.status(200).json({ message: "Pet deleted" });
+        res.status(200).json(new ResponseAPI("Pet deleted"));
       } else {
-        res.status(404).json({ message: "Pet not found" });
+        res.status(404).json(new ResponseAPI("Pet not found"));
       }
     } catch (err) {
-      res.status(500).json({ message: "Error deleting pet" });
+      res.status(500).json(new ResponseAPI("Error deleting pet"));
     }
   }
 
@@ -193,12 +189,13 @@ export default class PetController {
 
       if (entity) {
         const model = PetMapper.toModel(entity);
-        res.status(200).json(instanceToPlain(PetMapper.toResponse(model)));
+        res.status(200).json(new ResponseAPI("Pet adopted", instanceToPlain(PetMapper.toResponse(model))));
       } else {
-        res.status(404).json({ message: "Pet not found" });
+        res.status(404).json(new ResponseAPI("Pet not found"));
       }
     } catch (err) {
-      res.status(500).json({ message: "Error adopting pet" });
+      res.status(500).json(new ResponseAPI("Error adopting pet"));
     }
   }
 }
+

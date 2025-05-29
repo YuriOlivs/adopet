@@ -9,6 +9,7 @@ import Address from "../domain/models/Address/Address";
 import AdopterEntity from "../domain/entities/AdopterEntity";
 import { CreateAddressDTO } from "../domain/models/Address/CreateAddressDTO";
 import AddressEntity from "../domain/entities/AddressEntity";
+import ResponseAPI from "../domain/models/ResponseAPI";
 
 export default class AdopterController {
    constructor(private repository: AdopterRepository) { }
@@ -29,10 +30,10 @@ export default class AdopterController {
          const entityCreated = await this.repository.createAdopter(AdopterMapper.toEntity(adopter));
          if (entityCreated) {
             const model = AdopterMapper.toModel(entityCreated);
-            res.status(201).json(instanceToPlain(AdopterMapper.toResponse(model)));
+            res.status(201).json(new ResponseAPI("Adopter created", instanceToPlain(AdopterMapper.toResponse(model))));
          }
       } catch (err) {
-         res.status(500).json({ message: "Error creating adopter" });
+         res.status(500).json(new ResponseAPI("Error creating adopter", err));
          return;
       }
    }
@@ -43,14 +44,14 @@ export default class AdopterController {
          const entity = await this.repository.getAdopter(id);
          if (entity) {
             const model = AdopterMapper.toModel(entity);
-            res.status(200).json(instanceToPlain(AdopterMapper.toResponse(model)));
+            res.status(200).json(new ResponseAPI("Adopter found", instanceToPlain(AdopterMapper.toResponse(model))));
          }
          else {
-            res.status(404).json({ message: "Adopter not found" });
+            res.status(404).json(new ResponseAPI("Adopter not found"));
          }
       }
       catch (err) {
-         res.status(500).json({ message: "Error getting adopter" });
+         res.status(500).json(new ResponseAPI("Error getting adopter", err));
       }
    }
 
@@ -71,14 +72,14 @@ export default class AdopterController {
          const entityUpdated = await this.repository.updateAdopter(id, AdopterMapper.toEntity(adopter) as AdopterEntity);
          if (entityUpdated) {
             const model = AdopterMapper.toModel(entityUpdated);
-            res.status(200).json(instanceToPlain(AdopterMapper.toResponse(model)));
+            res.status(200).json(new ResponseAPI("Adopter updated", instanceToPlain(AdopterMapper.toResponse(model))));
          }
          else {
-            res.status(404).json({ message: "Adopter not found" });
+            res.status(404).json(new ResponseAPI("Adopter not found"));
          }
       }
       catch (err) {
-         res.status(500).json({ message: "Error updating adopter" });
+         res.status(500).json(new ResponseAPI("Error updating adopter", err));
       }
    }
 
@@ -92,14 +93,14 @@ export default class AdopterController {
          const entityUpdated = await this.repository.updateAddress(id, address);
          if (entityUpdated) {
             const model = AdopterMapper.toModel(entityUpdated);
-            res.status(200).json(instanceToPlain(AdopterMapper.toResponse(model)));
+            res.status(200).json(new ResponseAPI("Adopter address updated", instanceToPlain(AdopterMapper.toResponse(model))));
          }
          else {
-            res.status(404).json({ message: "Adopter not found" });
+            res.status(404).json(new ResponseAPI("Adopter not found"));
          }
       }
       catch (err) {
-         res.status(500).json({ message: "Error updating adopter address" });
+         res.status(500).json(new ResponseAPI("Error updating adopter address", err));
       }
    }
 
@@ -109,14 +110,15 @@ export default class AdopterController {
 
          const adopterDeleted = await this.repository.deleteAdopter(id);
          if (adopterDeleted) {
-            res.status(200).json({ message: "Adopter deleted" });
+            res.status(200).json(new ResponseAPI("Adopter deleted"));
          }
          else {
-            res.status(404).json({ message: "Adopter not found" });
+            res.status(404).json(new ResponseAPI("Adopter not found"));
          }
       }
       catch (err) {
-         res.status(500).json({ message: "Error deleting adopter" });
+         res.status(500).json(new ResponseAPI("Error deleting adopter", err));
       }
    }
 }
+
