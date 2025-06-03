@@ -4,10 +4,10 @@ export default class CreateAdopterDTO {
    name: string;
    email: string;
    password: string;
-   photo?: string;
-   address?: CreateAddressDTO;
+   photo?: string | null;
+   address?: CreateAddressDTO | null;
 
-   constructor(name: string, email: string, password: string, photo?: string, address?: CreateAddressDTO) {
+   constructor(name: string, email: string, password: string, photo?: string | null, address?: CreateAddressDTO | null) {
       this.name = name;
       this.email = email;
       this.password = password;

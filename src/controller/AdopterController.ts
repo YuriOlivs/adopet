@@ -10,6 +10,8 @@ import AdopterEntity from "../domain/entities/AdopterEntity";
 import { CreateAddressDTO } from "../domain/models/Address/CreateAddressDTO";
 import AddressEntity from "../domain/entities/AddressEntity";
 import ResponseAPI from "../domain/models/ResponseAPI";
+import * as yup from "yup";
+import { adopterSchema } from "../domain/schemas/adopterSchema";
 
 export default class AdopterController {
    constructor(private repository: AdopterRepository) { }
@@ -17,10 +19,18 @@ export default class AdopterController {
    async createAdopter(
       req: Request<Record<string, string>, {}, CreateAdopterDTO>, 
       res: Response<ResponseAPI>
-   ) {
+   ) { 
       try {
+         await adopterSchema.validate(req.body, { 
+            abortEarly: false, 
+            stripUnknown: true 
+         });
+
          const { name, email, password, address: addressDTO, photo } = req.body as CreateAdopterDTO;
-         const address = addressDTO ? new Address(uuid(), addressDTO.state, addressDTO.city) : undefined;
+
+         const address = addressDTO 
+            ? new Address(uuid(), addressDTO.state, addressDTO.city) 
+            : undefined;
 
          const adopter = new CreateAdopterDTO(
             name,
@@ -36,6 +46,19 @@ export default class AdopterController {
             res.status(201).json(new ResponseAPI("Adopter created", instanceToPlain(AdopterMapper.toResponse(model))));
          }
       } catch (err) {
+         if (err instanceof yup.ValidationError) {
+            const validationErrors: Record<string, string[]> = {};
+
+            err.inner.forEach((error) => {
+               if (error.path) {
+                  validationErrors[error.path] = error.errors;
+               }
+            });
+            
+            res.status(400).json(new ResponseAPI("Error creating adopter", err.errors));
+            return;
+         }
+
          res.status(500).json(new ResponseAPI("Error creating adopter", err));
          return;
       }
