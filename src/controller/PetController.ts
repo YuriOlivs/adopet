@@ -8,7 +8,6 @@ import { instanceToPlain } from "class-transformer";
 import EnumPetSex from "../enum/EnumPetSex";
 import isValidEnumValue from "../utils/isValidEnumValue";
 import PetMapper from "../domain/mappers/PetMapper";
-import EnumSize from "../enum/EnumSize";
 import { PetFilters } from "../domain/models/PetFilters";
 import ResponseAPI from "../domain/models/ResponseAPI";
 
@@ -20,24 +19,16 @@ export default class PetController {
     res: Response<ResponseAPI>
   ): Promise<void> {
     try {
+
       const { name, species, birthDate, sex, size } = req.body;
 
-      if (!isValidEnumValue(EnumSpecies, species)) {
-        res.status(400).json(new ResponseAPI("Invalid species"));
-        return;
-      }
-
-      if (!isValidEnumValue(EnumPetSex, sex)) {
-        res.status(400).json(new ResponseAPI("Invalid sex"));
-        return;
-      }
-
-      if (!isValidEnumValue(EnumSize, size)) {
-        res.status(400).json(new ResponseAPI("Invalid size"));
-        return;
-      }
-
-      const pet = new CreatePetDTO(name, species, birthDate, sex, size);
+      const pet = new CreatePetDTO(
+        name, 
+        species, 
+        birthDate, 
+        sex, 
+        size
+      );
 
       const entityCreated = await this.repository.createPet(
         PetMapper.toEntity(pet)
@@ -46,8 +37,8 @@ export default class PetController {
         const model = PetMapper.toModel(entityCreated);
         res.status(201).json(new ResponseAPI("Pet created", instanceToPlain(PetMapper.toResponse(model))));
       }
-    } catch (error) {
-      res.status(500).json(new ResponseAPI("Error creating pet", error));
+    } catch (err) {
+      res.status(500).json(new ResponseAPI("Error creating pet", err));
     }
   }
 
@@ -56,6 +47,7 @@ export default class PetController {
     res: Response<ResponseAPI>
   ): Promise<void> {
     try {
+
       const invalidPets: Array<CreatePetDTO> = [];
       const petsToCreate = req.body;
 
