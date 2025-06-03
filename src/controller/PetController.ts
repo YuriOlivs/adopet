@@ -42,56 +42,37 @@ export default class PetController {
     }
   }
 
-  async createPetsBatch(
-    req: Request<Record<string, string>, {}, Array<CreatePetDTO>>, 
-    res: Response<ResponseAPI>
-  ): Promise<void> {
-    try {
+ async createPetsBatch(
+  req: Request<Record<string, string>, {}, Array<CreatePetDTO>>, 
+  res: Response<ResponseAPI>
+): Promise<void> {
+  try {
+    const petsToCreate = req.body;
 
-      const invalidPets: Array<CreatePetDTO> = [];
-      const petsToCreate = req.body;
-
-      const validPets = petsToCreate.filter((pet) => {
-        const isValid =
-          isValidEnumValue(EnumSpecies, pet.species) &&
-          isValidEnumValue(EnumPetSex, pet.sex);
-
-        if (!isValid) {
-          invalidPets.push(pet);
-        }
-
-        return isValid;
-      });
-
-      if (validPets.length == 0) {
-        res.status(400).json(new ResponseAPI("Invalid species, sex or size for the given pets"));
-        return;
-      }
-
-      const entitiesCreated = await this.repository.createPet(
-        PetMapper.toEntity(validPets)
-      );
-
-      if (entitiesCreated) {
-        const model = PetMapper.toModel(entitiesCreated);
-
-        if (invalidPets.length > 0) {
-          res.status(207).json(new ResponseAPI("Some pets were not created due to invalid attributes.", {
-            createdCount: Array.isArray(entitiesCreated)
-              ? entitiesCreated.length
-              : 1,
-            invalidCount: invalidPets.length,
-            created: instanceToPlain(PetMapper.toResponse(model)),
-            invalid: invalidPets,
-          }));
-        } else {
-          res.status(201).json(new ResponseAPI("Pets created", instanceToPlain(PetMapper.toResponse(model))));
-        }
-      }
-    } catch (err) {
-      res.status(500).json(new ResponseAPI("Error creating pets", err));
+    if (!petsToCreate.length) {
+      res.status(400).json(new ResponseAPI("No pets provided"));
+      return;
     }
+
+    const entitiesCreated = await this.repository.createPet(
+      PetMapper.toEntity(petsToCreate)
+    );
+
+    if (entitiesCreated) {
+      const model = PetMapper.toModel(entitiesCreated);
+
+      res.status(201).json(
+          new ResponseAPI(
+            "Pets created",
+            instanceToPlain(PetMapper.toResponse(model))
+          )
+        );
+    }
+  } catch (err) {
+    res.status(500).json(new ResponseAPI("Error creating pets", err));
   }
+}
+
 
   async getPet(
     req: Request<Record<string, string>, {}, {}>, 
@@ -134,11 +115,11 @@ export default class PetController {
   }
 
   async updatePet(
-    req: Request<Record<string, string>, {}, Pet>, 
+    req: Request<Record<string, string>, {}, CreatePetDTO>, 
     res: Response<ResponseAPI>
   ): Promise<void> {
     try {
-      const { name, species, birthDate, adopter, sex, size } = req.body;
+      const { name, species, birthDate, sex, size } = req.body;
       const { id } = req.params;
 
       if (
@@ -155,8 +136,7 @@ export default class PetController {
         species,
         birthDate,
         sex,
-        size,
-        adopter ?? undefined
+        size
       );
 
       const entityUpdated = await this.repository.updatePet(
