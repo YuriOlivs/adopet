@@ -3,7 +3,7 @@ import express from "express";
 import PetController from "../controller/PetController";
 import PetRepostiory from "../repository/Pet/PetRepository";
 import { AppDataSource } from "../config/dataSource";
-import { validateBody } from "../middleware/validators/adopterRequestBody";
+import { validateBody } from "../middleware/validators/validateBody";
 import { petSchema } from "../domain/schemas/petSchema";
 
 const router = express.Router();

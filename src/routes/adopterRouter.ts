@@ -3,7 +3,7 @@ import AdopterController from "../controller/AdopterController";
 import AdopterRepository from "../repository/Adopter/AdopterRepository";
 import { AppDataSource } from "../config/dataSource";
 import { adopterSchema } from "../domain/schemas/adopterSchema";
-import { validateBody } from "../middleware/validators/adopterRequestBody";
+import { validateBody } from "../middleware/validators/validateBody";
 
 const router = express.Router();
 const adopterRepository = new AdopterRepository(AppDataSource.getRepository("AdopterEntity"));
