@@ -21,6 +21,7 @@ export const adopterSchema: yup.ObjectSchema<CreateAdopterDTO> = yup.object({
    photo: yup
       .string()
       .optional()
+      .matches(/^(\(?[0-9]{2}\)?)? ?([0-9]{4,5})-?([0-9]{4})$/gm, "Invalid phone number")
       .nullable(),
    address: addressSchema
       .optional()
