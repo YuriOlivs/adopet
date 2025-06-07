@@ -26,3 +26,7 @@ export const petSchema: yup.ObjectSchema<
       .oneOf(Object.values(EnumSize))
       .required(),
 });
+
+export const petListSchema = yup.object().shape({
+  pets: yup.array().of(petSchema)
+});
