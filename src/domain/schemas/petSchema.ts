@@ -28,5 +28,5 @@ export const petSchema: yup.ObjectSchema<
 });
 
 export const petListSchema = yup.object().shape({
-  pets: yup.array().of(petSchema)
+  pets: yup.array().of(petSchema).required(),
 });

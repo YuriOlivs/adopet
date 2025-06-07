@@ -5,7 +5,18 @@ import * as yup from "yup";
 export const validateBody = (schema: yup.ObjectSchema<any> | yup.ArraySchema<any, any>) => {
    return async (req: Request, res: Response, next: NextFunction) => {
       try {
-         await schema.validate(req.body, {
+         let bodyToValidate = req.body;
+
+         const isPetListSchema = 
+            schema instanceof yup.ObjectSchema &&
+            schema.fields &&
+            'pets' in schema.fields;
+
+         if (isPetListSchema && Array.isArray(req.body)) {
+            bodyToValidate = { pets: req.body };
+         }
+
+         await schema.validate(bodyToValidate, {
             abortEarly: false,
             stripUnknown: true
          });
