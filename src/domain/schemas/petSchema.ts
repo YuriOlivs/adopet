@@ -1,8 +1,8 @@
 import * as yup from "yup";
 import CreatePetDTO from "../models/Pet/CreatePetDTO";
-import EnumSpecies from "../../enum/Species";
-import EnumPetSex from "../../enum/PetSex";
-import EnumSize from "../../enum/Size";
+import Species from "../../enum/Species";
+import PetSex from "../../enum/PetSex";
+import Size from "../../enum/Size";
 
 export const petSchema: yup.ObjectSchema<
    Omit<CreatePetDTO, "adopted">
@@ -11,19 +11,19 @@ export const petSchema: yup.ObjectSchema<
       .string()
       .required(),
    species: yup
-      .mixed<EnumSpecies>()
-      .oneOf(Object.values(EnumSpecies))
+      .mixed<Species>()
+      .oneOf(Object.values(Species))
       .required(),
    birthDate: yup
       .date()
       .required(),
    sex: yup
-      .mixed<EnumPetSex>()
-      .oneOf(Object.values(EnumPetSex))
+      .mixed<PetSex>()
+      .oneOf(Object.values(PetSex))
       .required(),
    size: yup
-      .mixed<EnumSize>()
-      .oneOf(Object.values(EnumSize))
+      .mixed<Size>()
+      .oneOf(Object.values(Size))
       .required(),
 });
 

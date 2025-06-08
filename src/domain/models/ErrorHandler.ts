@@ -1,4 +1,4 @@
-import { EnumHttpStatusCode } from "../../enum/HttpStatusCode";
+import { HttpStatusCode } from "../../enum/HttpStatusCode";
 
 export class ErrorHandler extends Error {
    readonly statusCode: number;
@@ -11,31 +11,31 @@ export class ErrorHandler extends Error {
 
 export class BadRequest extends ErrorHandler {
    constructor(message: string) {
-      super(message, EnumHttpStatusCode.BAD_REQUEST);
+      super(message, HttpStatusCode.BAD_REQUEST);
    }
 }
 
 export class NotFound extends ErrorHandler {
    constructor(message: string) {
-      super(message, EnumHttpStatusCode.NOT_FOUND);
+      super(message, HttpStatusCode.NOT_FOUND);
    }
 }
 
 export class Conflict extends ErrorHandler {
    constructor(message: string) {
-      super(message, EnumHttpStatusCode.CONFLICT);
+      super(message, HttpStatusCode.CONFLICT);
    }
 }
 
 export class Unauthorized extends ErrorHandler {
    constructor(message: string) {
-      super(message, EnumHttpStatusCode.UNAUTHORIZED);
+      super(message, HttpStatusCode.UNAUTHORIZED);
    }
 }
 
 export class Forbidden extends ErrorHandler {
    constructor(message: string) {
-      super(message, EnumHttpStatusCode.FORBIDDEN);
+      super(message, HttpStatusCode.FORBIDDEN);
    }
 }
 

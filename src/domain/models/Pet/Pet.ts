@@ -1,6 +1,6 @@
-import EnumPetSex from "../../../enum/PetSex";
-import EnumSize from "../../../enum/Size";
-import EnumSpecies from "../../../enum/Species";
+import PetSex from "../../../enum/PetSex";
+import Size from "../../../enum/Size";
+import Species from "../../../enum/Species";
 import { Expose } from "class-transformer";
 import Adopter from "../Adopter/Adopter";
 
@@ -12,16 +12,16 @@ export default class Pet {
   private _name: string;
 
   @Expose({ name: "species" })
-  private _species: EnumSpecies;
+  private _species: Species;
 
   @Expose({ name: "birthDate" })
   private _birthDate: Date;
 
   @Expose({ name: "sex" })
-  private _sex: EnumPetSex;
+  private _sex: PetSex;
 
   @Expose({ name: "size" })
-  private _size: EnumSize;
+  private _size: Size;
 
   @Expose({ name: "adopter" })
   private _adopter?: Adopter | null;
@@ -29,10 +29,10 @@ export default class Pet {
   constructor(
     id: string,
     name: string,
-    species: EnumSpecies,
+    species: Species,
     birthDate: Date,
-    sex: EnumPetSex,
-    size: EnumSize,
+    sex: PetSex,
+    size: Size,
     adopter?: Adopter
   ) {
     this._id = id;
@@ -48,17 +48,17 @@ export default class Pet {
 
   get id(): string { return this._id; }
   get name(): string { return this._name; }
-  get species(): EnumSpecies { return this._species; }
+  get species(): Species { return this._species; }
   get birthDate(): Date { return this._birthDate; }
-  get sex(): EnumPetSex { return this._sex; }
-  get size(): EnumSize { return this._size; }
+  get sex(): PetSex { return this._sex; }
+  get size(): Size { return this._size; }
   get adopter(): Adopter | null { return this._adopter || null; }
 
   setId(id: string) { this._id = id; }
   setName(name: string) { this._name = name; }
-  setSpecies(species: EnumSpecies) { this._species = species; }
+  setSpecies(species: Species) { this._species = species; }
   setBirthDate(birthDate: Date) { this._birthDate = birthDate; }
-  setSex(sex: EnumPetSex) { this._sex = sex; }
-  setSize(size: EnumSize) { this._size = size; }
+  setSex(sex: PetSex) { this._sex = sex; }
+  setSize(size: Size) { this._size = size; }
   setAdopted(adopted: Adopter) { this._adopter = adopted; }
 }

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ErrorHandler } from "../domain/models/ErrorHandler";
-import { EnumHttpStatusCode } from "../enum/HttpStatusCode";
+import { HttpStatusCode } from "../enum/HttpStatusCode";
 
 export const errorMiddleware = (
   error: ErrorHandler,
@@ -9,7 +9,7 @@ export const errorMiddleware = (
   next: NextFunction
 ) => {
   const statusCode =
-    error.statusCode ?? EnumHttpStatusCode.INTERNAL_SERVER_ERROR;
+    error.statusCode ?? HttpStatusCode.INTERNAL_SERVER_ERROR;
   const message = error.statusCode ? error.message : "Internal server error";
 
   res.status(statusCode).json({ message });

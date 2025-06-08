@@ -1,6 +1,6 @@
-enum EnumPetSex {
+enum PetSex {
    MACHO = "macho",
    FEMEA = "femea"
 };
 
-export default EnumPetSex;
+export default PetSex;

@@ -1,16 +1,16 @@
-import EnumPetSex from "../../../enum/PetSex";
-import EnumSize from "../../../enum/Size";
-import EnumSpecies from "../../../enum/Species";
+import PetSex from "../../../enum/PetSex";
+import Size from "../../../enum/Size";
+import Species from "../../../enum/Species";
 
 export default class CreatePetDTO {
    name: string;
-   species: EnumSpecies;
+   species: Species;
    birthDate: Date;
-   sex: EnumPetSex;
-   size: EnumSize;
+   sex: PetSex;
+   size: Size;
    adopted: boolean;
 
-   constructor(name: string, species: EnumSpecies, birthDate: Date, sex: EnumPetSex, size: EnumSize) {
+   constructor(name: string, species: Species, birthDate: Date, sex: PetSex, size: Size) {
       this.name = name;
       this.species = species;
       this.birthDate = birthDate;
