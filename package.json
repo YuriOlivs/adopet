@@ -24,10 +24,13 @@
   "dependencies": {
     "class-transformer": "^0.5.1",
     "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "express-errors": "^0.3.1",
     "reflect-metadata": "^0.2.2",
     "sqlite3": "^5.1.7",
     "tsc-watch": "^6.0.4",
     "typeorm": "^0.3.24",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "yup": "^1.6.1"
   }
 }

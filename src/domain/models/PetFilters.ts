@@ -1,10 +1,10 @@
-import EnumPetSex from "../../enum/EnumPetSex";
-import EnumSize from "../../enum/EnumSize";
-import EnumSpecies from "../../enum/EnumSpecies";
+import PetSex from "../../enum/PetSex";
+import Size from "../../enum/Size";
+import Species from "../../enum/Species";
 
 export interface PetFilters {
    query?: string;
-   species?: EnumSpecies;
-   size?: EnumSize;
-   sex?: EnumPetSex;
+   species?: Species;
+   size?: Size;
+   sex?: PetSex;
 }

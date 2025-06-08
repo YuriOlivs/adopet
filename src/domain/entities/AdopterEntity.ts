@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import AddressEntity from "./AddressEntity";
 import PetEntity from "./PetEntity";
+import { cryptPassword } from "../../utils/cryptPassword";
 @Entity()
 export default class AdopterEntity {
    @PrimaryGeneratedColumn("uuid")
@@ -9,7 +10,7 @@ export default class AdopterEntity {
    @Column()
    name: string;
 
-   @Column()
+   @Column({ unique: true })
    email: string;
 
    @Column()
@@ -45,5 +46,11 @@ export default class AdopterEntity {
       this.address = address;
       this.photo = photo;
       this.password = password;
+   }
+
+   @BeforeInsert()
+   @BeforeUpdate()
+   protected async createCryptPassword() {
+      this.password = cryptPassword(this.password);
    }
 }

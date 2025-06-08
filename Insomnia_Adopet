@@ -1,0 +1,554 @@
+type: collection.insomnia.rest/5.0
+name: adopet
+meta:
+  id: wrk_c750d4cf18cf4722a7a0ecf2eadd88a6
+  created: 1747883568189
+  modified: 1748094020370
+collection:
+  - name: PET
+    meta:
+      id: fld_3bcbf89a3fad4d3aa966cce44f2e91c2
+      created: 1748215014926
+      modified: 1748215014926
+      sortKey: -1748215014926
+    children:
+      - url: http://localhost:3000/pets
+        name: Create PET
+        meta:
+          id: req_8491d0fc0ea04ad89f68c73a1de5d9c9
+          created: 1747883577969
+          modified: 1749342252114
+          isPrivate: false
+          sortKey: -1748215022439
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"name": "Bolt",
+            	"species": "cachorro",
+            	"birthDate": "2024-08-12",
+            	"adopted": false,
+            	"sex": "macho",
+            	"size": "pequeno"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.2.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/pets
+        name: Get All PETs
+        meta:
+          id: req_0bb75bfc5910481ab76d381a22912b24
+          created: 1748050010084
+          modified: 1748474245339
+          isPrivate: false
+          sortKey: -1748215022339
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/pets/4da64b54-7af3-41c7-b6f6-546d99114db9
+        name: Update PET
+        meta:
+          id: req_84129a319e144b8b915857509fadb600
+          created: 1748093563657
+          modified: 1748465667749
+          isPrivate: false
+          sortKey: -1748215022739
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"id": "a83600c6-6c38-4a55-9d6a-1bd0c2be98f4",
+            	"name": "Boltinho",
+            	"species": "cachorro",
+            	"birthDate": "2024-08-12",
+            	"adopted": false,
+            	"sex": "macho"
+            }
+        parameters:
+          - id: pair_9d4b2c2e06bb4294a266729a52ccb1fa
+            name: id
+            value: 9cfa42a4-07d8-4ab9-8314-5d124a246e19
+            disabled: false
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/pets/batch
+        name: Create PET Batch
+        meta:
+          id: req_c443c6fcc94e426086eb2d946f4126cb
+          created: 1748194020102
+          modified: 1749338961275
+          isPrivate: false
+          sortKey: -1748215022539
+        method: POST
+        body:
+          mimeType: application/json
+          text: |
+            [
+              {
+                "name": "Bolt",
+                "species": "cachorro",
+                "birthDate": "2024-08-12",
+                "adopted": false,
+                "sex": "macho",
+            		"size": "grande"
+              },
+              {
+                "name": "Mimi",
+                "species": "gato",
+                "birthDate": "2023-05-20",
+                "adopted": true,
+                "sex": "femea",
+            		"size": "grande"
+              },
+              {
+                "name": "Nino",
+                "species": "cachorro",
+                "birthDate": "2022-11-01",
+                "adopted": false,
+                "sex": "macho",
+            		"size": "grande"
+              },
+              {
+                "name": "Luna",
+                "species": "gato",
+                "birthDate": "2023-07-15",
+                "adopted": false,
+                "sex": "femea",
+            		"size": "grande"
+              },
+              {
+                "name": "Nina",
+                "species": "cachorro",
+                "birthDate": "2024-01-05",
+                "adopted": true,
+                "sex": "femea",
+            		"size": "grande"
+              }
+            ]
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.2.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/pets/batch
+        name: Create PET Batch (Some invalid)
+        meta:
+          id: req_9414c0d4b1ef4388a9588f83e680679f
+          created: 1748199673956
+          modified: 1748460377411
+          isPrivate: false
+          sortKey: -1748215022639
+        method: POST
+        body:
+          mimeType: application/json
+          text: |
+            [
+              {
+                "name": "Theo",
+                "species": "peixe dourado",
+                "birthDate": "2023-09-14",
+                "adopted": false,
+                "sex": "macho",
+                "size": "pequeno"
+              },
+              {
+                "name": "Jade",
+                "species": "tartaruga",
+                "birthDate": "2022-04-03",
+                "adopted": true,
+                "sex": "feme",
+                "size": "medio"
+              },
+              {
+                "name": "Zeca",
+                "species": "cachorro",
+                "birthDate": "2021-12-25",
+                "adopted": true,
+                "sex": "macho",
+                "size": "medio"
+              },
+              {
+                "name": "Lia",
+                "species": "gato",
+                "birthDate": "2024-02-28",
+                "adopted": false,
+                "sex": "femeas",
+                "size": "medio"
+              },
+              {
+                "name": "Tigrão",
+                "species": "cachorro",
+                "birthDate": "2023-06-10",
+                "adopted": false,
+                "sex": "macho",
+                "size": "grande"
+              },
+              {
+                "name": "Amora",
+                "species": "gato",
+                "birthDate": "2022-08-19",
+                "adopted": true,
+                "sex": "femea",
+                "size": "medio"
+              },
+              {
+                "name": "Bento",
+                "species": "coelho",
+                "birthDate": "2020-11-05",
+                "adopted": true,
+                "sex": "masculino",
+                "size": "pequeno"
+              },
+              {
+                "name": "Sofia",
+                "species": "gato",
+                "birthDate": "2021-01-23",
+                "adopted": false,
+                "sex": "femea",
+                "size": "medio"
+              }
+            ]
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.2.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/pets/a83600c6-6c38-4a55-9d6a-1bd0c2be98f4
+        name: Delete PET
+        meta:
+          id: req_1615a32adc3c48999873665024b436dd
+          created: 1748216077550
+          modified: 1748216138803
+          isPrivate: false
+          sortKey: -1730503219292
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/pets/4da64b54-7af3-41c7-b6f6-546d99114db9
+        name: Get PET
+        meta:
+          id: req_9bca55b1ec8c4a70a762863bc1c4b04c
+          created: 1748216103369
+          modified: 1748533427701
+          isPrivate: false
+          sortKey: -1739359120815.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/pets/adopt/d244fd17-4db4-4312-b3e6-8718a0547015/1809ab27-693c-49da-9178-bd5cee1450f6
+        name: Adopt PET
+        meta:
+          id: req_363f4e2979d143e6956b867483476dc3
+          created: 1748465597009
+          modified: 1748466925724
+          isPrivate: false
+          sortKey: -1748215022689
+        method: PUT
+        parameters:
+          - id: pair_9d4b2c2e06bb4294a266729a52ccb1fa
+            name: id
+            value: 9cfa42a4-07d8-4ab9-8314-5d124a246e19
+            disabled: false
+        headers:
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/pets?sex=macho&size=grande
+        name: Get All PETs w/ Filters
+        meta:
+          id: req_12029c57ece244188ff90c0fb8e969e4
+          created: 1748474257369
+          modified: 1749341595329
+          isPrivate: false
+          sortKey: -1743787071577.25
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: ADOPTER
+    meta:
+      id: fld_73362efebe2b4eb89f9fb08baf2e9788
+      created: 1748215044787
+      modified: 1748215044787
+      sortKey: -1748215044787
+    children:
+      - url: http://localhost:3000/adopters
+        name: Create ADOPTER
+        meta:
+          id: req_fbf0965038bc4fbfbaf9ee1f3ec8749a
+          created: 1748215048661
+          modified: 1748914657005
+          isPrivate: false
+          sortKey: -1748215048661
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "name": "Laura Perez Fachine",
+              "email": "laura@example.com",
+              "password": "senhaSegura123",
+              "photo": null,
+            	"address": {
+            		"state": "SP",
+            		"city": "São Paulo"
+            	}
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/adopters/1809ab27-693c-49da-9178-bd5cee1450f6
+        name: Get ADOPTER
+        meta:
+          id: req_b2a40fb4fcf340c587daafa20008d66f
+          created: 1748215285930
+          modified: 1748465562445
+          isPrivate: false
+          sortKey: -1748215035700
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/adopters/f4ccd08c-d4d8-409c-8c59-0b965ca39ba8
+        name: Update ADOPTER
+        meta:
+          id: req_35dfdd05c2a9480bb8e7580339940b15
+          created: 1748215308902
+          modified: 1748216034897
+          isPrivate: false
+          sortKey: -1748215029219.5
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "name": "João da Silva de Oliveira",
+              "email": "joao.silva@example.com",
+              "password": "senhaSegura123",
+              "address": "Rua das Flores, 123, São Paulo - SP",
+              "photo": "https://exemplo.com/fotos/joao.jpg"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/adopters/f4ccd08c-d4d8-409c-8c59-0b965ca39ba8
+        name: Delete ADOPTER
+        meta:
+          id: req_fcaa611629824873b64e74873fc99f56
+          created: 1748216165591
+          modified: 1748216167657
+          isPrivate: false
+          sortKey: -1748215032459.75
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/adopters/address/014661b2-7e56-4a26-b425-907b4b1ac9bb
+        name: Update ADOPTER ADDRESS
+        meta:
+          id: req_2bdbbb86f7824436948a8676a8a24007
+          created: 1748461056476
+          modified: 1748461139506
+          isPrivate: false
+          sortKey: -1748215025979.25
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"state": "SP",
+            	"city": "Mogi das Cruzes"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/adopters
+        name: Get All ADOPTERs
+        meta:
+          id: req_326d435238794a16a798d1ac649fb1f3
+          created: 1748533730063
+          modified: 1748533732313
+          isPrivate: false
+          sortKey: -1748215034079.875
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/adopters
+        name: Create ADOPTER Partial
+        meta:
+          id: req_7ff9d6cea8c443bc991995ff21b9150e
+          created: 1748908929478
+          modified: 1748909713435
+          isPrivate: false
+          sortKey: -1748215042180.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "name": "Laura Perez Fachine",
+              "email": "laura@example.com",
+              "password": "senhaSegura123"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_349763c168044be996b00e01d6d0f3219a7f078a
+    created: 1747883568194
+    modified: 1747883568194
+environments:
+  name: Base Environment
+  meta:
+    id: env_349763c168044be996b00e01d6d0f3219a7f078a
+    created: 1747883568192
+    modified: 1747883568192
+    isPrivate: false

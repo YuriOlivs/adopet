@@ -1,6 +1,6 @@
-enum EnumSpecies {
+enum Species {
    CACHORRO = "cachorro",
    GATO = "gato"
 };
 
-export default EnumSpecies;
+export default Species;

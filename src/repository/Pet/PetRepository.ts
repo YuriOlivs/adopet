@@ -4,6 +4,7 @@ import PetEntity from "../../domain/entities/PetEntity";
 import AdopterEntity from "../../domain/entities/AdopterEntity";
 import { PetFilters } from "../../domain/models/PetFilters";
 import { ILike } from "typeorm";
+import { NotFound } from "../../domain/models/ErrorHandler";
 
 export default class PetRepostiory implements IPetRepository {
    private repository: Repository<PetEntity>;
@@ -55,10 +56,10 @@ export default class PetRepostiory implements IPetRepository {
    async adoptPet(petId: string, adopterId: string): Promise<PetEntity | null> {
 
       const pet = await this.repository.findOneBy({ id: petId });
-      if(!pet) return null;
+      if(!pet) throw new NotFound("Pet not found")
 
       const adopter = await this.adopterRepository.findOneBy({ id: adopterId });
-      if(!adopter) return null;
+      if(!adopter) throw new NotFound("Adopter not found");
 
       pet.adopter = adopter;
       return await this.repository.save(pet);
