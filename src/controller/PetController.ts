@@ -7,7 +7,8 @@ import { instanceToPlain } from "class-transformer";
 import PetMapper from "../domain/mappers/PetMapper";
 import { PetFilters } from "../domain/models/PetFilters";
 import ResponseAPI from "../domain/models/ResponseAPI";
-import { NotFound } from "../domain/models/ErrorHandler";
+import { BadRequest, NotFound } from "../domain/models/ErrorHandler";
+import { HttpStatusCode } from "../enum/HttpStatusCode";
 
 export default class PetController {
   constructor(private repository: PetRepostiory) {}
@@ -32,7 +33,7 @@ export default class PetController {
 
     if (entityCreated) {
       const model = PetMapper.toModel(entityCreated);
-      res.status(201).json(
+      res.status(HttpStatusCode.CREATED).json(
         new ResponseAPI(
           "Pet created",
           instanceToPlain(PetMapper.toResponse(model))
@@ -48,8 +49,7 @@ export default class PetController {
     const petsToCreate = req.body;
 
     if (!petsToCreate.length) {
-      res.status(400).json(new ResponseAPI("No pets provided"));
-      return;
+      throw new BadRequest("Empty body");
     }
 
     const entitiesCreated = await this.repository.createPet(
@@ -59,7 +59,7 @@ export default class PetController {
     if (entitiesCreated) {
       const model = PetMapper.toModel(entitiesCreated);
 
-      res.status(201).json(
+      res.status(HttpStatusCode.CREATED).json(
         new ResponseAPI(
           "Pets created",
           instanceToPlain(PetMapper.toResponse(model))
@@ -78,7 +78,7 @@ export default class PetController {
 
     if (entity) {
       const model = PetMapper.toModel(entity);
-      res.status(200).json(
+      res.status(HttpStatusCode.OK).json(
         new ResponseAPI(
           "Pet found",
           instanceToPlain(PetMapper.toResponse(model))
@@ -101,7 +101,7 @@ export default class PetController {
       return;
     }
 
-    res.status(200).json(
+    res.status(HttpStatusCode.OK).json(
       new ResponseAPI(
         "Pets found",
         pets.map((pet) => {
@@ -135,7 +135,7 @@ export default class PetController {
 
     if (entityUpdated) {
       const model = PetMapper.toModel(entityUpdated);
-      res.status(200).json(
+      res.status(HttpStatusCode.OK).json(
         new ResponseAPI(
           "Pet updated",
           instanceToPlain(PetMapper.toResponse(model))
@@ -155,7 +155,7 @@ export default class PetController {
     const petDeleted = await this.repository.deletePet(id);
 
     if (petDeleted) {
-      res.status(200).json(new ResponseAPI("Pet deleted"));
+      res.status(HttpStatusCode.OK).json(new ResponseAPI("Pet deleted"));
     } else {
       throw new NotFound("Pet not found");
     }
@@ -171,7 +171,7 @@ export default class PetController {
 
     if (entity) {
       const model = PetMapper.toModel(entity);
-      res.status(200).json(
+      res.status(HttpStatusCode.OK).json(
         new ResponseAPI(
           "Pet adopted",
           instanceToPlain(PetMapper.toResponse(model))

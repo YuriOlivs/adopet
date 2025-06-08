@@ -11,6 +11,7 @@ import { CreateAddressDTO } from "../domain/models/Address/CreateAddressDTO";
 import AddressEntity from "../domain/entities/AddressEntity";
 import ResponseAPI from "../domain/models/ResponseAPI";
 import { NotFound } from "../domain/models/ErrorHandler";
+import { HttpStatusCode } from "../enum/HttpStatusCode";
 
 export default class AdopterController {
    constructor(private repository: AdopterRepository) {}
@@ -37,7 +38,7 @@ export default class AdopterController {
 
       if (entityCreated) {
          const model = AdopterMapper.toModel(entityCreated);
-         res.status(201).json(new ResponseAPI("Adopter created", instanceToPlain(AdopterMapper.toResponse(model))));
+         res.status(HttpStatusCode.CREATED).json(new ResponseAPI("Adopter created", instanceToPlain(AdopterMapper.toResponse(model))));
       }
    }
 
@@ -51,7 +52,7 @@ export default class AdopterController {
 
       if (entity) {
          const model = AdopterMapper.toModel(entity);
-         res.status(200).json(new ResponseAPI("Adopter found", instanceToPlain(AdopterMapper.toResponse(model))));
+         res.status(HttpStatusCode.OK).json(new ResponseAPI("Adopter found", instanceToPlain(AdopterMapper.toResponse(model))));
       } else {
          throw new NotFound("Adopter not found");
       }
@@ -65,7 +66,7 @@ export default class AdopterController {
 
       const models = entities.map((entity) => AdopterMapper.toModel(entity));
 
-      res.status(200).json(
+      res.status(HttpStatusCode.OK).json(
          new ResponseAPI(
             "Adopters found",
             models.map((model) => instanceToPlain(AdopterMapper.toResponse(model)))
@@ -96,7 +97,7 @@ export default class AdopterController {
 
       if (entityUpdated) {
          const model = AdopterMapper.toModel(entityUpdated);
-         res.status(200).json(new ResponseAPI("Adopter updated", instanceToPlain(AdopterMapper.toResponse(model))));
+         res.status(HttpStatusCode.OK).json(new ResponseAPI("Adopter updated", instanceToPlain(AdopterMapper.toResponse(model))));
       } else {
          throw new NotFound("Adopter not found");
       }
@@ -115,7 +116,7 @@ export default class AdopterController {
 
       if (entityUpdated) {
          const model = AdopterMapper.toModel(entityUpdated);
-         res.status(200).json(new ResponseAPI("Adopter address updated", instanceToPlain(AdopterMapper.toResponse(model))));
+         res.status(HttpStatusCode.OK).json(new ResponseAPI("Adopter address updated", instanceToPlain(AdopterMapper.toResponse(model))));
       } else {
          throw new NotFound("Adopter not found");
       }
@@ -130,7 +131,7 @@ export default class AdopterController {
       const adopterDeleted = await this.repository.deleteAdopter(id);
 
       if (adopterDeleted) {
-         res.status(200).json(new ResponseAPI("Adopter deleted"));
+         res.status(HttpStatusCode.OK).json(new ResponseAPI("Adopter deleted"));
       } else {
          throw new NotFound("Adopter not found");
       }
