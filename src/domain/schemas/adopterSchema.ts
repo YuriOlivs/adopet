@@ -12,7 +12,8 @@ export const adopterSchema: yup.ObjectSchema<CreateAdopterDTO> = yup.object({
       .string()
       .email()
       .defined()
-      .required(),
+      .required()
+      .matches(/^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim),
    password: yup
       .string()
       .defined()

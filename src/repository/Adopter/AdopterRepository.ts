@@ -2,6 +2,7 @@ import IAdopterRepository from "./IAdopterRepository";
 import AdopterEntity from "../../domain/entities/AdopterEntity";
 import { Repository } from "typeorm";
 import AddressEntity from "../../domain/entities/AddressEntity";
+import { Conflict } from "../../domain/models/ErrorHandler";
 
 export default class AdopterRepository implements IAdopterRepository {
    private repository: Repository<AdopterEntity>;
@@ -11,6 +12,7 @@ export default class AdopterRepository implements IAdopterRepository {
    }
 
    async createAdopter(adopter: AdopterEntity): Promise<AdopterEntity> {
+      if (await this.checkExistingEmail(adopter.email)) throw new Conflict("Email already exists");
       return await this.repository.save(adopter);
    }
 
@@ -40,5 +42,9 @@ export default class AdopterRepository implements IAdopterRepository {
 
    async deleteAdopter(id: string): Promise<boolean> {
       return (await this.repository.delete(id)).affected !== 0;
+   }
+
+   private async checkExistingEmail(email: string) {
+      return await this.repository.findOneBy({ email });
    }
 }
