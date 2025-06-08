@@ -10,6 +10,7 @@ import AdopterEntity from "../domain/entities/AdopterEntity";
 import { CreateAddressDTO } from "../domain/models/Address/CreateAddressDTO";
 import AddressEntity from "../domain/entities/AddressEntity";
 import ResponseAPI from "../domain/models/ResponseAPI";
+import { NotFound } from "../domain/models/ErrorHandler";
 
 export default class AdopterController {
    constructor(private repository: AdopterRepository) {}
@@ -52,7 +53,7 @@ export default class AdopterController {
          const model = AdopterMapper.toModel(entity);
          res.status(200).json(new ResponseAPI("Adopter found", instanceToPlain(AdopterMapper.toResponse(model))));
       } else {
-         res.status(404).json(new ResponseAPI("Adopter not found"));
+         throw new NotFound("Adopter not found");
       }
    }
 
@@ -97,7 +98,7 @@ export default class AdopterController {
          const model = AdopterMapper.toModel(entityUpdated);
          res.status(200).json(new ResponseAPI("Adopter updated", instanceToPlain(AdopterMapper.toResponse(model))));
       } else {
-         res.status(404).json(new ResponseAPI("Adopter not found"));
+         throw new NotFound("Adopter not found");
       }
    }
 
@@ -116,7 +117,7 @@ export default class AdopterController {
          const model = AdopterMapper.toModel(entityUpdated);
          res.status(200).json(new ResponseAPI("Adopter address updated", instanceToPlain(AdopterMapper.toResponse(model))));
       } else {
-         res.status(404).json(new ResponseAPI("Adopter not found"));
+         throw new NotFound("Adopter not found");
       }
    }
 
@@ -131,7 +132,7 @@ export default class AdopterController {
       if (adopterDeleted) {
          res.status(200).json(new ResponseAPI("Adopter deleted"));
       } else {
-         res.status(404).json(new ResponseAPI("Adopter not found"));
+         throw new NotFound("Adopter not found");
       }
    }
 }

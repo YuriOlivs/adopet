@@ -1,15 +1,13 @@
 import { Request, Response } from "express";
 import CreatePetDTO from "../domain/models/Pet/CreatePetDTO";
-import EnumSpecies from "../enum/EnumSpecies";
 import Pet from "../domain/models/Pet/Pet";
 import PetRepostiory from "../repository/Pet/PetRepository";
 import PetEntity from "../domain/entities/PetEntity";
 import { instanceToPlain } from "class-transformer";
-import EnumPetSex from "../enum/EnumPetSex";
-import isValidEnumValue from "../utils/isValidEnumValue";
 import PetMapper from "../domain/mappers/PetMapper";
 import { PetFilters } from "../domain/models/PetFilters";
 import ResponseAPI from "../domain/models/ResponseAPI";
+import { NotFound } from "../domain/models/ErrorHandler";
 
 export default class PetController {
   constructor(private repository: PetRepostiory) {}
@@ -87,7 +85,7 @@ export default class PetController {
         )
       );
     } else {
-      res.status(404).json(new ResponseAPI("Pet not found"));
+      throw new NotFound("Pet not found");
     }
   }
 
@@ -121,14 +119,6 @@ export default class PetController {
     const { name, species, birthDate, sex, size } = req.body;
     const { id } = req.params;
 
-    if (
-      !isValidEnumValue(EnumSpecies, species) &&
-      !isValidEnumValue(EnumPetSex, sex)
-    ) {
-      res.status(400).json(new ResponseAPI("Invalid species or sex"));
-      return;
-    }
-
     const pet = new Pet(
       id,
       name,
@@ -152,7 +142,7 @@ export default class PetController {
         )
       );
     } else {
-      res.status(404).json(new ResponseAPI("Pet not found"));
+      throw new NotFound("Pet not found");
     }
   }
 
@@ -167,7 +157,7 @@ export default class PetController {
     if (petDeleted) {
       res.status(200).json(new ResponseAPI("Pet deleted"));
     } else {
-      res.status(404).json(new ResponseAPI("Pet not found"));
+      throw new NotFound("Pet not found");
     }
   }
 
@@ -187,8 +177,6 @@ export default class PetController {
           instanceToPlain(PetMapper.toResponse(model))
         )
       );
-    } else {
-      res.status(404).json(new ResponseAPI("Pet not found"));
     }
   }
 }
