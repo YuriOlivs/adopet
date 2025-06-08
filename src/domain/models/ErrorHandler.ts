@@ -1,4 +1,4 @@
-import { EnumHttpStatusCode } from "../../enum/EnumHttpStatusCode";
+import { EnumHttpStatusCode } from "../../enum/HttpStatusCode";
 
 export class ErrorHandler extends Error {
    readonly statusCode: number;

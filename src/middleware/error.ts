@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ErrorHandler } from "../domain/models/ErrorHandler";
-import { EnumHttpStatusCode } from "../enum/EnumHttpStatusCode";
+import { EnumHttpStatusCode } from "../enum/HttpStatusCode";
 
 export const errorMiddleware = (
   error: ErrorHandler,

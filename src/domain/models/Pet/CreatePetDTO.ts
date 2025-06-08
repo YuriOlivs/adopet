@@ -1,6 +1,6 @@
-import EnumPetSex from "../../../enum/EnumPetSex";
-import EnumSize from "../../../enum/EnumSize";
-import EnumSpecies from "../../../enum/EnumSpecies";
+import EnumPetSex from "../../../enum/PetSex";
+import EnumSize from "../../../enum/Size";
+import EnumSpecies from "../../../enum/Species";
 
 export default class CreatePetDTO {
    name: string;

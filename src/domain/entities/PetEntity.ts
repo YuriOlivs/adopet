@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import EnumSpecies from "../../enum/EnumSpecies";
-import EnumPetSex from "../../enum/EnumPetSex";;
-import EnumSize from "../../enum/EnumSize";
+import EnumSpecies from "../../enum/Species";
+import EnumPetSex from "../../enum/PetSex";;
+import EnumSize from "../../enum/Size";
 import AdopterEntity from "./AdopterEntity";
 
 @Entity()
@@ -37,7 +37,7 @@ export default class PetEntity {
       adopter?: AdopterEntity,
    ) {
       if (id) this.id = id;
-      if(adopter) this.adopter = adopter;
+      if (adopter) this.adopter = adopter;
       this.name = name;
       this.species = species;
       this.birthDate = birthDate;

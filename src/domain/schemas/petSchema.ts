@@ -1,8 +1,8 @@
 import * as yup from "yup";
 import CreatePetDTO from "../models/Pet/CreatePetDTO";
-import EnumSpecies from "../../enum/EnumSpecies";
-import EnumPetSex from "../../enum/EnumPetSex";
-import EnumSize from "../../enum/EnumSize";
+import EnumSpecies from "../../enum/Species";
+import EnumPetSex from "../../enum/PetSex";
+import EnumSize from "../../enum/Size";
 
 export const petSchema: yup.ObjectSchema<
    Omit<CreatePetDTO, "adopted">
@@ -28,5 +28,5 @@ export const petSchema: yup.ObjectSchema<
 });
 
 export const petListSchema = yup.object().shape({
-  pets: yup.array().of(petSchema).required(),
+   pets: yup.array().of(petSchema).required(),
 });
