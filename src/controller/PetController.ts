@@ -125,7 +125,7 @@ export default class PetController {
       species,
       birthDate,
       sex,
-      size
+      size,
     );
 
     const entityUpdated = await this.repository.updatePet(
