@@ -3,6 +3,7 @@ import Size from "../../../enum/Size";
 import Species from "../../../enum/Species";
 import { Expose } from "class-transformer";
 import Adopter from "../Adopter/Adopter";
+import Shelter from "../Shelter/Shelter";
 
 export default class Pet {
   @Expose({ name: "id" })
@@ -23,6 +24,9 @@ export default class Pet {
   @Expose({ name: "size" })
   private _size: Size;
 
+  @Expose({ name: "shelter" })
+  private _shelter: Omit<Shelter, "pets">;
+
   @Expose({ name: "adopter" })
   private _adopter?: Adopter | null;
 
@@ -33,6 +37,7 @@ export default class Pet {
     birthDate: Date,
     sex: PetSex,
     size: Size,
+    shelter: Shelter,
     adopter?: Adopter
   ) {
     this._id = id;
@@ -41,6 +46,7 @@ export default class Pet {
     this._birthDate = birthDate;
     this._sex = sex;
     this._size = size;
+    this._shelter = shelter;
     this._adopter = adopter ?? null;
   }
 
@@ -52,6 +58,7 @@ export default class Pet {
   get birthDate(): Date { return this._birthDate; }
   get sex(): PetSex { return this._sex; }
   get size(): Size { return this._size; }
+  get shelter(): Omit<Shelter, "pets"> { return this._shelter; }
   get adopter(): Adopter | null { return this._adopter || null; }
 
   setId(id: string) { this._id = id; }
@@ -60,5 +67,6 @@ export default class Pet {
   setBirthDate(birthDate: Date) { this._birthDate = birthDate; }
   setSex(sex: PetSex) { this._sex = sex; }
   setSize(size: Size) { this._size = size; }
+  setShelter(shelter: Shelter) { this._shelter = shelter; }
   setAdopted(adopted: Adopter) { this._adopter = adopted; }
 }
