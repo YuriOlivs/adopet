@@ -9,6 +9,12 @@ export class ErrorHandler extends Error {
    }
 }
 
+export class InternalServerError extends ErrorHandler {
+   constructor(message: string) {
+      super(message, HttpStatusCode.INTERNAL_SERVER_ERROR);
+   }
+}
+
 export class BadRequest extends ErrorHandler {
    constructor(message: string) {
       super(message, HttpStatusCode.BAD_REQUEST);

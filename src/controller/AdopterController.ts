@@ -47,7 +47,6 @@ export default class AdopterController {
       res: Response<ResponseAPI>
    ) {
       const { id } = req.params;
-
       const entity = await this.repository.getAdopter(id);
 
       if (entity) {
@@ -127,7 +126,6 @@ export default class AdopterController {
       res: Response<ResponseAPI>
    ) {
       const { id } = req.params;
-
       const adopterDeleted = await this.repository.deleteAdopter(id);
 
       if (adopterDeleted) {

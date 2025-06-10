@@ -22,7 +22,7 @@ export default class Shelter {
   private _pets?: Array<Pet>;
 
   @Expose({ name: "address" })
-  private _address?: Address;
+  private _address: Address;
 
   constructor(
     id: string,
@@ -30,15 +30,21 @@ export default class Shelter {
     password: string,
     email: string,
     phone: string,
-    address: Address
+    address: Address,
+    pets?: Array<Pet>
   ) {
     this._id = id;
     this._name = name;
     this._password = password;
     this._email = email;
     this._phone = phone;
-    this._pets = [];
     this._address = address;
+
+    if (pets) {
+      this._pets = pets
+    } else {
+      this._pets = [];
+    }
   }
 
   addPet(pet: Pet) {
@@ -51,7 +57,7 @@ export default class Shelter {
   get email(): string { return this._email; }
   get phone(): string { return this._phone; }
   get pets(): Array<Pet> | undefined { return this._pets; }
-  get address(): Address | undefined { return this._address; }
+  get address(): Address { return this._address; }
 
   setName(name: string) { this._name = name; }
   setPassword(password: string) { this._password = password; }

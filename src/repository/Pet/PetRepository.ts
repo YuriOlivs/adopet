@@ -2,7 +2,7 @@ import { Repository } from "typeorm";
 import IPetRepository from "./IPetRepository";
 import PetEntity from "../../domain/entities/PetEntity";
 import AdopterEntity from "../../domain/entities/AdopterEntity";
-import { PetFilters } from "../../domain/models/PetFilters";
+import { PetFilters } from "../../domain/models/filters/PetFilters";
 import { ILike } from "typeorm";
 import { NotFound } from "../../domain/models/ErrorHandler";
 
@@ -35,9 +35,9 @@ export default class PetRepostiory implements IPetRepository {
    }
 
    async getPet(id: string): Promise<PetEntity | null> {
-      return await this.repository.findOne({ 
+      return await this.repository.findOne({
          where: { id },
-         relations: ['adopter'] 
+         relations: ['adopter']
       });;
    }
 
@@ -56,10 +56,10 @@ export default class PetRepostiory implements IPetRepository {
    async adoptPet(petId: string, adopterId: string): Promise<PetEntity | null> {
 
       const pet = await this.repository.findOneBy({ id: petId });
-      if(!pet) throw new NotFound("Pet not found")
+      if (!pet) throw new NotFound("Pet not found")
 
       const adopter = await this.adopterRepository.findOneBy({ id: adopterId });
-      if(!adopter) throw new NotFound("Adopter not found");
+      if (!adopter) throw new NotFound("Adopter not found");
 
       pet.adopter = adopter;
       return await this.repository.save(pet);

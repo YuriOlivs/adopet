@@ -5,13 +5,13 @@ import PetRepostiory from "../repository/Pet/PetRepository";
 import PetEntity from "../domain/entities/PetEntity";
 import { instanceToPlain } from "class-transformer";
 import PetMapper from "../domain/mappers/PetMapper";
-import { PetFilters } from "../domain/models/PetFilters";
+import { PetFilters } from "../domain/models/filters/PetFilters";
 import ResponseAPI from "../domain/models/ResponseAPI";
 import { BadRequest, NotFound } from "../domain/models/ErrorHandler";
 import { HttpStatusCode } from "../enum/HttpStatusCode";
 
 export default class PetController {
-  constructor(private repository: PetRepostiory) {}
+  constructor(private repository: PetRepostiory) { }
 
   async createPet(
     req: Request<Record<string, string>, {}, CreatePetDTO>,
