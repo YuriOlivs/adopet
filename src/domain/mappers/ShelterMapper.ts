@@ -3,13 +3,13 @@ import PetEntity from "../entities/PetEntity";
 import ShelterEntity from "../entities/ShelterEntity";
 import Address from "../models/Address/Address";
 import Pet from "../models/Pet/Pet";
-import ResponsePetDTO from "../models/Pet/ResponsePetDTO";
 import CreateShelterDTO from "../models/Shelter/CreateShelterDTO";
 import ResponseShelterDTO from "../models/Shelter/ResponseShelterDTO";
 import Shelter from "../models/Shelter/Shelter";
 import PetMapper from "./PetMapper";
 
 export default class ShelterMapper {
+
   static toEntity(shelter: CreateShelterDTO | Shelter): ShelterEntity {
     let pets: Array<PetEntity> = [];
     const id = shelter instanceof Shelter ? shelter.id : undefined;
@@ -59,28 +59,12 @@ export default class ShelterMapper {
   }
 
   static toResponse(shelter: Shelter): ResponseShelterDTO {
-   let pets: Array<Omit<ResponsePetDTO, "shelter">> = [];
-
-   if (shelter.pets && shelter.pets.length > 0) {
-     pets = shelter.pets.map((pet) => {
-       return {
-         id: pet.id,
-         name: pet.name,
-         species: pet.species,
-         birthDate: pet.birthDate,
-         sex: pet.sex,
-         size: pet.size,
-       };
-     })   
-   }
-
     return {
       id: shelter.id,
       name: shelter.name,
       email: shelter.email,
       phone: shelter.phone,
-      address: shelter.address,
-      pets: pets
+      address: shelter.address
     };
   }
 }

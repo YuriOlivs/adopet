@@ -4,8 +4,9 @@ import IShelterRepository from "./IShelterRepository";
 import { ShelterFilters } from "../../domain/models/filters/ShelterFilters";
 import { ILike } from "typeorm/find-options/operator/ILike";
 import PetEntity from "../../domain/entities/PetEntity";
-import { NotFound } from "../../domain/models/ErrorHandler";
+import { Conflict, NotFound } from "../../domain/models/ErrorHandler";
 
+//adicionar validações de email e celular já existentes
 export default class ShelterRepository implements IShelterRepository {
   private repository: Repository<ShelterEntity>;
   private petRepository: Repository<PetEntity>;
@@ -19,8 +20,19 @@ export default class ShelterRepository implements IShelterRepository {
   }
 
   async createShelter(shelter: ShelterEntity): Promise<ShelterEntity> {
+    const emailFound = await this.repository.findOneBy({
+      email: ILike(`%${shelter.email}%`),
+    });
+    if (emailFound) throw new Conflict("Email already exists");
+
+    const phoneFound = await this.repository.findOneBy({
+      phone: ILike(`%${shelter.phone}%`),
+    });
+    if (phoneFound) throw new Conflict("Phone already exists");
+
     return await this.repository.save(shelter);
   }
+  
   async updateShelter(
     id: string,
     shelter: ShelterEntity
@@ -31,6 +43,7 @@ export default class ShelterRepository implements IShelterRepository {
     Object.assign(shelterFound, shelter);
     return await this.repository.save(shelterFound);
   }
+
   async getShelter(id: string): Promise<ShelterEntity | null> {
     return await this.repository.findOne({
       where: { id },

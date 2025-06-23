@@ -1,9 +1,12 @@
 import { DataSource } from "typeorm";
-import path from "path";
+import AdopterEntity from "../domain/entities/AdopterEntity";
+import PetEntity from "../domain/entities/PetEntity";
+import ShelterEntity from "../domain/entities/ShelterEntity";
+import AddressEntity from "../domain/entities/AddressEntity";
 
 export const AppDataSource = new DataSource({
    type: "sqlite",
    database: "./src/config/db.sqlite",
-   entities: [path.resolve(__dirname, "../domain/entities/*.ts")],
+   entities: [AdopterEntity, PetEntity, ShelterEntity, AddressEntity],
    synchronize: true
 })

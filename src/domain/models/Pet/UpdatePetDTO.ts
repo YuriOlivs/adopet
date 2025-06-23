@@ -2,22 +2,20 @@ import PetSex from "../../../enum/PetSex";
 import Size from "../../../enum/Size";
 import Species from "../../../enum/Species";
 
-export default class CreatePetDTO {
+export default class UpdatePetDTO {
   name: string;
   species: Species;
   birthDate: Date;
   sex: PetSex;
   size: Size;
   adopted: boolean;
-  shelter: string;
 
   constructor(
     name: string,
     species: Species,
     birthDate: Date,
     sex: PetSex,
-    size: Size,
-    shelter: string
+    size: Size
   ) {
     this.name = name;
     this.species = species;
@@ -25,6 +23,5 @@ export default class CreatePetDTO {
     this.sex = sex;
     this.size = size;
     this.adopted = false;
-    this.shelter = shelter;
   }
 }

@@ -29,7 +29,7 @@ export default class PetEntity {
    adopter!: AdopterEntity
 
    @ManyToOne(() => ShelterEntity, (shelter) => shelter.pets)
-   shelter: ShelterEntity
+   shelter!: ShelterEntity
 
    constructor(
       name: string,
@@ -37,17 +37,17 @@ export default class PetEntity {
       birthDate: Date,
       sex: PetSex,
       size: Size,
-      shelter: ShelterEntity,
       id?: string,
-      adopter?: AdopterEntity
+      adopter?: AdopterEntity,
+      shelter?: ShelterEntity,
    ) {
       if (id) this.id = id;
       if (adopter) this.adopter = adopter;
+      if (shelter) this.shelter = shelter;
       this.name = name;
       this.species = species;
       this.birthDate = birthDate;
       this.sex = sex;
       this.size = size;
-      this.shelter = shelter
    }
 }

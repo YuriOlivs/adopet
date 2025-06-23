@@ -41,27 +41,35 @@ export default class ShelterEntity {
   @JoinColumn()
   pets!: Array<PetEntity>;
 
-  constructor(
-    name: string,
-    password: string,
-    email: string,
-    phone: string,
-    address: AddressEntity,
-    id?: string,
-    pets?: Array<PetEntity>
-  ) {
-    if (id) this.id = id;
-    if (pets) this.pets = pets;
-    this.name = name;
-    this.password = password;
-    this.email = email;
-    this.phone = phone;
-    this.address = address;
-  }
+constructor();
+constructor(name?: string, password?: string, email?: string, phone?: string, address?: AddressEntity, id?: string, pets?: Array<PetEntity>);
+constructor(
+  name?: string,
+  password?: string,
+  email?: string,
+  phone?: string,
+  address?: AddressEntity,
+  id?: string,
+  pets?: Array<PetEntity>
+) {
+  if (id) this.id = id;
+  if (pets) this.pets = pets;
+  this.name = name ?? "";
+  this.password = password ?? "";
+  this.email = email ?? "";
+  this.phone = phone ?? "";
+  this.address = address ?? ({} as AddressEntity);
+}
 
   @BeforeInsert()
   @BeforeUpdate()
   protected async createCryptPassword() {
     this.password = cryptPassword(this.password);
+  }
+
+  static fromId(id: string) {
+    const shelter = new ShelterEntity("", "", "", "", {} as any);
+    shelter.id = id;
+    return shelter;
   }
 }

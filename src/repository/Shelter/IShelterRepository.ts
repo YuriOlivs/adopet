@@ -1,4 +1,3 @@
-import PetEntity from "../../domain/entities/PetEntity";
 import ShelterEntity from "../../domain/entities/ShelterEntity";
 import { ShelterFilters } from "../../domain/models/filters/ShelterFilters";
 

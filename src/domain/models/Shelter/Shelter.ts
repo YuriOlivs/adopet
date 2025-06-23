@@ -65,3 +65,5 @@ export default class Shelter {
   setPhone(phone: string) { this._phone = phone; }
   setAddress(address: Address) { this._address = address; }
 }
+
+export type ShelterOmit = Omit<Shelter, "pets" | "password">;

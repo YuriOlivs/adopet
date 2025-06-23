@@ -1,9 +1,9 @@
 export default class ResponseAPI {
    message: string;
-   data?: any;
+   body?: any;
 
    constructor(message: string, data?: any) {
       this.message = message;
-      this.data = data;
+      this.body = data;
    }
 }

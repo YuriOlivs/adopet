@@ -7,8 +7,9 @@ import { instanceToPlain } from "class-transformer";
 import PetMapper from "../domain/mappers/PetMapper";
 import { PetFilters } from "../domain/models/filters/PetFilters";
 import ResponseAPI from "../domain/models/ResponseAPI";
-import { BadRequest, NotFound } from "../domain/models/ErrorHandler";
+import { BadRequest, InternalServerError, NotFound } from "../domain/models/ErrorHandler";
 import { HttpStatusCode } from "../enum/HttpStatusCode";
+import UpdatePetDTO from "../domain/models/Pet/UpdatePetDTO";
 
 export default class PetController {
   constructor(private repository: PetRepostiory) { }
@@ -17,14 +18,15 @@ export default class PetController {
     req: Request<Record<string, string>, {}, CreatePetDTO>,
     res: Response<ResponseAPI>
   ): Promise<void> {
-    const { name, species, birthDate, sex, size } = req.body;
+    const { name, species, birthDate, sex, size, shelter: shelterId } = req.body;
 
     const pet = new CreatePetDTO(
       name,
       species,
       birthDate,
       sex,
-      size
+      size,
+      shelterId
     );
 
     const entityCreated = await this.repository.createPet(
@@ -53,7 +55,7 @@ export default class PetController {
     }
 
     const entitiesCreated = await this.repository.createPet(
-      PetMapper.toEntity(petsToCreate)
+      PetMapper.toEntity(petsToCreate as Array<CreatePetDTO>)
     );
 
     if (entitiesCreated) {
@@ -93,6 +95,7 @@ export default class PetController {
     req: Request<Record<string, string>, {}, {}, PetFilters>,
     res: Response<ResponseAPI>
   ): Promise<void> {
+    try {
     const filters = req.query;
     const pets = await this.repository.getAllPets(filters);
 
@@ -110,10 +113,14 @@ export default class PetController {
         })
       )
     );
+    } catch (error) {
+      console.log(error)
+      throw new InternalServerError("sei la")
+    }
   }
 
   async updatePet(
-    req: Request<Record<string, string>, {}, CreatePetDTO>,
+    req: Request<Record<string, string>, {}, UpdatePetDTO>,
     res: Response<ResponseAPI>
   ): Promise<void> {
     const { name, species, birthDate, sex, size } = req.body;
@@ -125,7 +132,7 @@ export default class PetController {
       species,
       birthDate,
       sex,
-      size,
+      size
     );
 
     const entityUpdated = await this.repository.updatePet(

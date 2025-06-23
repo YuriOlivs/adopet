@@ -25,7 +25,7 @@ export default class Pet {
   private _size: Size;
 
   @Expose({ name: "shelter" })
-  private _shelter: Omit<Shelter, "pets">;
+  private _shelter?: Shelter | null;
 
   @Expose({ name: "adopter" })
   private _adopter?: Adopter | null;
@@ -37,8 +37,8 @@ export default class Pet {
     birthDate: Date,
     sex: PetSex,
     size: Size,
-    shelter: Shelter,
-    adopter?: Adopter
+    adopter?: Adopter,
+    shelter?: Shelter,
   ) {
     this._id = id;
     this._name = name;
@@ -46,7 +46,7 @@ export default class Pet {
     this._birthDate = birthDate;
     this._sex = sex;
     this._size = size;
-    this._shelter = shelter;
+    this._shelter = shelter ?? null;
     this._adopter = adopter ?? null;
   }
 
@@ -58,7 +58,7 @@ export default class Pet {
   get birthDate(): Date { return this._birthDate; }
   get sex(): PetSex { return this._sex; }
   get size(): Size { return this._size; }
-  get shelter(): Omit<Shelter, "pets"> { return this._shelter; }
+  get shelter(): Shelter | null { return this._shelter || null; }
   get adopter(): Adopter | null { return this._adopter || null; }
 
   setId(id: string) { this._id = id; }
