@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import ResponseAPI from "../../domain/models/ResponseAPI";
 import * as yup from "yup";
+import { BadRequest } from "../../domain/models/ErrorHandler";
 
 export const validateBody = (schema: yup.ObjectSchema<any> | yup.ArraySchema<any, any>) => {
    return async (req: Request, res: Response, next: NextFunction) => {
@@ -33,8 +34,11 @@ export const validateBody = (schema: yup.ObjectSchema<any> | yup.ArraySchema<any
                }
             });
             
-            res.status(400).json(new ResponseAPI("Error creating adopter", err.errors));
+            res.status(400).json(new ResponseAPI("Error during creation", err.errors));
             return;
+         } else {
+            console.log(err)
+            throw new BadRequest("Error during creation");
          }
       }
    }

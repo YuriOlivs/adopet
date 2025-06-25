@@ -1,5 +1,5 @@
 import ResponseAdopterDTO from "../Adopter/ResponseAdopterDTO";
-import Shelter from "../Shelter/Shelter";
+import ResponseShelterDTO from "../Shelter/ResponseShelterDTO";
 
 export default class ResponsePetDTO {
   id: string;
@@ -8,7 +8,7 @@ export default class ResponsePetDTO {
   birthDate: Date;
   sex: string;
   size: string;
-  shelter: Omit<Shelter, "pets">
+  shelter: ResponseShelterDTO | null;
   adopter?: ResponseAdopterDTO | null;
 
   constructor(
@@ -18,8 +18,8 @@ export default class ResponsePetDTO {
     birthDate: Date,
     sex: string,
     size: string,
-    shelter: Omit<Shelter, "pets">,
     adopter?: ResponseAdopterDTO,
+    shelter?: ResponseShelterDTO,
   ) {
     this.id = id;
     this.name = name;
@@ -27,7 +27,7 @@ export default class ResponsePetDTO {
     this.birthDate = birthDate;
     this.sex = sex;
     this.size = size;
-    this.shelter = shelter;
+    this.shelter = shelter ?? null;
     this.adopter = adopter ?? null;
   }
 }

@@ -2,23 +2,46 @@ import { Repository } from "typeorm";
 import IPetRepository from "./IPetRepository";
 import PetEntity from "../../domain/entities/PetEntity";
 import AdopterEntity from "../../domain/entities/AdopterEntity";
-import { PetFilters } from "../../domain/models/PetFilters";
+import { PetFilters } from "../../domain/models/filters/PetFilters";
 import { ILike } from "typeorm";
-import { NotFound } from "../../domain/models/ErrorHandler";
+import { BadRequest, NotFound } from "../../domain/models/ErrorHandler";
+import ShelterEntity from "../../domain/entities/ShelterEntity";
 
 export default class PetRepostiory implements IPetRepository {
    private repository: Repository<PetEntity>;
-   private adopterRepository: Repository<AdopterEntity>
+   private adopterRepository: Repository<AdopterEntity>;
+   private shelterRepository: Repository<ShelterEntity>;
 
-   constructor(repository: Repository<PetEntity>, adopterRepository: Repository<AdopterEntity>) {
+   constructor(
+      repository: Repository<PetEntity>, 
+      adopterRepository: Repository<AdopterEntity>,
+      shelterRepository: Repository<ShelterEntity>
+   ) {
       this.repository = repository;
-      this.adopterRepository = adopterRepository
+      this.adopterRepository = adopterRepository;
+      this.shelterRepository = shelterRepository;
    }
 
    async createPet(pet: PetEntity | Array<PetEntity>): Promise<PetEntity | Array<PetEntity>> {
       if (Array.isArray(pet)) {
+         pet.map(async item => {
+            if (!item.shelter) throw new BadRequest("Shelter is required q");
+
+            const shelter = await this.shelterRepository.findOneBy({ id: item.shelter.id });
+            if(!shelter) throw new NotFound("Shelter not found");
+
+            item.shelter = shelter;
+         });
+
          return await this.repository.save(pet);
       } else {
+         if (!pet.shelter) throw new BadRequest("Shelter is required");
+
+         const shelter = await this.shelterRepository.findOneBy({ id: pet.shelter.id });
+         if(!shelter) throw new NotFound("Shelter not found");
+
+         pet.shelter = shelter;
+
          return await this.repository.save(pet);
       }
    }
@@ -31,13 +54,13 @@ export default class PetRepostiory implements IPetRepository {
       if (filters.species) where.species = filters.species;
       if (filters.sex) where.sex = filters.sex;
 
-      return await this.repository.find({ where, relations: ['adopter'] });
+      return await this.repository.find({ where, relations: ['adopter', 'shelter'] });
    }
 
    async getPet(id: string): Promise<PetEntity | null> {
-      return await this.repository.findOne({ 
+      return await this.repository.findOne({
          where: { id },
-         relations: ['adopter'] 
+         relations: ['adopter', 'shelter']
       });;
    }
 
@@ -56,10 +79,10 @@ export default class PetRepostiory implements IPetRepository {
    async adoptPet(petId: string, adopterId: string): Promise<PetEntity | null> {
 
       const pet = await this.repository.findOneBy({ id: petId });
-      if(!pet) throw new NotFound("Pet not found")
+      if (!pet) throw new NotFound("Pet not found")
 
       const adopter = await this.adopterRepository.findOneBy({ id: adopterId });
-      if(!adopter) throw new NotFound("Adopter not found");
+      if (!adopter) throw new NotFound("Adopter not found");
 
       pet.adopter = adopter;
       return await this.repository.save(pet);
