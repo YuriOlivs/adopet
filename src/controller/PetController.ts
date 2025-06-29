@@ -119,6 +119,30 @@ export default class PetController {
     }
   }
 
+  async getPetsByShelter(
+    req: Request<Record<string, string>, {}, {}>,
+    res: Response<ResponseAPI>
+  ): Promise<void> {
+    const { id } = req.params;
+
+    const pets = await this.repository.getPetsByShelter(id);
+
+    if (pets.length == 0) {
+      res.status(204).json(new ResponseAPI("No pets found"));
+      return;
+    }
+
+    res.status(HttpStatusCode.OK).json(
+      new ResponseAPI(
+        "Pets found",
+        pets.map((pet) => {
+          const model = PetMapper.toModel(pet);
+          return instanceToPlain(PetMapper.toResponse(model));
+        })
+      )
+    );
+  }
+
   async updatePet(
     req: Request<Record<string, string>, {}, UpdatePetDTO>,
     res: Response<ResponseAPI>

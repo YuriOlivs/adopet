@@ -8,6 +8,7 @@ export default interface IPetRepository {
 
    getAllPets(filters: PetFilters): Promise<Array<PetEntity>>;
    getPet(id: string): Promise<PetEntity | null>;
+   getPetsByShelter(shelterId: string): Promise<Array<PetEntity> | null>;
 
    deletePet(id: string): Promise<boolean>;
 }

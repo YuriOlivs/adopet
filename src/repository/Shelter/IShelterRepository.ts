@@ -4,7 +4,7 @@ import { ShelterFilters } from "../../domain/models/filters/ShelterFilters";
 export default interface IShelterRepository {
    createShelter(shelter: ShelterEntity): Promise<ShelterEntity>;
    updateShelter(id: string, shelter: ShelterEntity): Promise<ShelterEntity | null>;
-   addPet(shelterId: string, petId: string): Promise<boolean>;
+   addPet(shelterId: string, petId: string): Promise<ShelterEntity>;
    
    getShelter(id: string): Promise<ShelterEntity | null>;
    getAllShelters(filters: ShelterFilters): Promise<Array<ShelterEntity>>;
