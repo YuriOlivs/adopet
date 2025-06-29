@@ -6,7 +6,6 @@ import { ILike } from "typeorm/find-options/operator/ILike";
 import PetEntity from "../../domain/entities/PetEntity";
 import { Conflict, NotFound } from "../../domain/models/ErrorHandler";
 
-//adicionar validações de email e celular já existentes
 export default class ShelterRepository implements IShelterRepository {
   private repository: Repository<ShelterEntity>;
   private petRepository: Repository<PetEntity>;
@@ -32,7 +31,7 @@ export default class ShelterRepository implements IShelterRepository {
 
     return await this.repository.save(shelter);
   }
-  
+
   async updateShelter(
     id: string,
     shelter: ShelterEntity
@@ -47,24 +46,25 @@ export default class ShelterRepository implements IShelterRepository {
   async getShelter(id: string): Promise<ShelterEntity | null> {
     return await this.repository.findOne({
       where: { id },
-      relations: ["pets"],
     });
   }
 
-  async addPet(shelterId: string, petId: string): Promise<boolean> {
-   const petFound = await this.petRepository.findOneBy({ id: petId });
-   if (!petFound) throw new NotFound("Pet not found");
+  async addPet(shelterId: string, petId: string): Promise<ShelterEntity> {
+    const petFound = await this.petRepository.findOneBy({ id: petId });
+    if (!petFound) throw new NotFound("Pet not found");
 
-   const shelterFound = await this.repository.findOneBy({ id: shelterId });
-   if (!shelterFound) throw new NotFound("Shelter not found");
+    const shelterFound = await this.repository.findOneBy({ id: shelterId });
+    if (!shelterFound) throw new NotFound("Shelter not found");
 
-   shelterFound.pets.push(petFound);
-   petFound.shelter = shelterFound;
+    petFound.shelter = shelterFound;
+    await this.petRepository.save(petFound);
 
-   const petUpdated = await this.petRepository.save(petFound);
-   const shelterUpdated = await this.repository.save(shelterFound);
+    const updatedShelter = await this.repository.findOne({
+      where: { id: shelterId },
+      relations: ["pets"],
+    });
 
-   return shelterUpdated.pets.includes(petUpdated);
+    return updatedShelter!;
   }
 
   async getAllShelters(filters: ShelterFilters): Promise<Array<ShelterEntity>> {

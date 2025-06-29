@@ -34,6 +34,8 @@ router.get("/", (req, res) => petController.getAllPets(req, res));
 
 router.get("/:id", (req, res) => petController.getPet(req, res));
 
+router.get("/by-shelter/:id", (req, res) => petController.getPetsByShelter(req, res));
+
 router.delete("/:id", (req, res) => petController.deletePet(req, res));
 
 export default router;

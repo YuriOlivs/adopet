@@ -21,6 +21,6 @@ router.get("/", (req, res) => shelterController.getAllShelters(req, res));
 router.get("/:id", (req, res) => shelterController.getShelter(req, res));
 router.put("/:id", (req, res) => shelterController.updateShelter(req, res));
 router.delete("/:id", (req, res) => shelterController.deleteShelter(req, res));
-router.put("/add-pet/:shelterId/:petId", (req, res) => shelterController.addPet(req, res));
+router.put("/assign-pet/:shelterId/:petId", (req, res) => shelterController.addPet(req, res));
 
 export default router;
